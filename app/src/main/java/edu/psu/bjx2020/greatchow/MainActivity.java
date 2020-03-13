@@ -21,12 +21,9 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase.insert(new Recipe(2, "Scrambled Eggs", "More Breakfast"));
         AppDatabase.insert(new Recipe(3, "General Tso's Chicken", "Good but not Breakfast"));
 
-        AppDatabase.getRecipe(1, new AppDatabase.RecipeListener() {
-            @Override
-            public void onRecipeReturned(RecipeWithIngredients recipe) {
-                Log.d("Database", recipe.recipe.title);
-                Log.d("Database", recipe.ingredients.get(0).title);
-            }
+        AppDatabase.getRecipe(1, recipe -> {
+            Log.d("Database", recipe.recipe.title);
+            Log.d("Database", recipe.ingredients.get(0).title);
         });
     }
 }
