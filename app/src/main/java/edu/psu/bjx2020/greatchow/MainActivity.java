@@ -20,10 +20,16 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase.insert(new Contains(1, 1, "2/3 cup"));
         AppDatabase.insert(new Recipe(2, "Scrambled Eggs", "More Breakfast"));
         AppDatabase.insert(new Recipe(3, "General Tso's Chicken", "Good but not Breakfast"));
+        AppDatabase.insert(new Account(1, "jmd6724", "secure"));
 
         AppDatabase.getRecipe(1, recipe -> {
             Log.d("Database", recipe.recipe.title);
             Log.d("Database", recipe.ingredients.get(0).title);
+        });
+
+        AppDatabase.getAccount(1, account -> {
+            Log.d("Database", account.username);
+            Log.d("Database", account.password);
         });
     }
 }
