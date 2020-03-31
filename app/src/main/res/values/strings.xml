@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GreatChow</string>
+    <string name="preference_setting">Setting</string>
+    <string name="default_lang">English</string>
+    <string name="pref_vege">Vegetarian</string>
+    <string name="pref_vege_summ">Only show vegetarian recipe.</string>
+    <string name="sys_setting">System Settings</string>
+    <string name="personal_setting">Personal Settings</string>
 </resources>

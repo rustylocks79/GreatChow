@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/sys_setting">
+        <ListPreference
+                android:key="language_preference"
+                android:title="Language"
+                android:entries="@array/Language"
+                android:entryValues="@array/languageAlias"
+                android:defaultValue="en-US"
+        />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/personal_setting">
+    <ListPreference
+            android:key="sorting_preference"
+            android:title="Sorting Attributes"
+            android:entries="@array/sorting"
+            android:entryValues="@array/sortingAttributes"
+            android:defaultValue="Alp"
+    />
+
+    <CheckBoxPreference
+            android:key="@string/pref_vege"
+            android:title="@string/pref_vege"
+            android:summary="@string/pref_vege_summ"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>
