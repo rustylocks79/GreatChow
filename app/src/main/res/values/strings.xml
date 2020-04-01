@@ -6,4 +6,7 @@
     <string name="pref_vege_summ">Only show vegetarian recipe.</string>
     <string name="sys_setting">System Settings</string>
     <string name="personal_setting">Personal Settings</string>
+    <string name="list1">edu.psu.bjx2020.greatchow.list1</string>
+    <string name="list2">edu.psu.bjx2020.greatchow.list2</string>
+    <string name="checkbox">edu.psu.bjx2020.greatchow.checkbox</string>
 </resources>

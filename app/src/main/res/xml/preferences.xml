@@ -4,6 +4,7 @@
     <PreferenceCategory
         android:title="@string/sys_setting">
         <ListPreference
+                android:id="@+id/lList"
                 android:key="language_preference"
                 android:title="Language"
                 android:entries="@array/Language"
@@ -15,6 +16,7 @@
     <PreferenceCategory
             android:title="@string/personal_setting">
     <ListPreference
+            android:id="@+id/sList"
             android:key="sorting_preference"
             android:title="Sorting Attributes"
             android:entries="@array/sorting"
@@ -23,6 +25,7 @@
     />
 
     <CheckBoxPreference
+            android:id="@+id/vCheckBox"
             android:key="@string/pref_vege"
             android:title="@string/pref_vege"
             android:summary="@string/pref_vege_summ"
