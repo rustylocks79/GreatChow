@@ -2,13 +2,12 @@ package edu.psu.bjx2020.greatchow;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.util.Log;
-import android.view.MenuInflater;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import edu.psu.bjx2020.greatchow.db.*;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
 
@@ -57,5 +56,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }
