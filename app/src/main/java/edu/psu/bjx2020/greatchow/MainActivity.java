@@ -2,12 +2,16 @@ package edu.psu.bjx2020.greatchow;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
+import edu.psu.bjx2020.greatchow.db.*;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -17,24 +21,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Needed to insure that database instance is created.
-        //AppDatabase rdb = AppDatabase.getDatabase(getApplicationContext());
+        AppDatabase rdb = AppDatabase.getDatabase(getApplicationContext());
 
-        //AppDatabase.insert(new Recipe(1, "Pancakes", "Breakfast"));
-        //AppDatabase.insert(new Ingredient(1, "Butter"));
-        //AppDatabase.insert(new Contains(1, 1, "2/3 cup"));
-        //AppDatabase.insert(new Recipe(2, "Scrambled Eggs", "More Breakfast"));
-        //AppDatabase.insert(new Recipe(3, "General Tso's Chicken", "Good but not Breakfast"));
-        //AppDatabase.insert(new Account(1, "jmd6724", "secure"));
+        AppDatabase.insert(new Recipe(1, "Pancakes", "Breakfast"));
+        AppDatabase.insert(new Ingredient(1, "Butter"));
+        AppDatabase.insert(new Contains(1, 1, "2/3 cup"));
+        AppDatabase.insert(new Recipe(2, "Scrambled Eggs", "More Breakfast"));
+        AppDatabase.insert(new Recipe(3, "General Tso's Chicken", "Good but not Breakfast"));
+        AppDatabase.insert(new Account(1, "jmd6724", "secure"));
 
-        //AppDatabase.getRecipe(1, recipe -> {
-        //    Log.d("Database", recipe.recipe.title);
-        //    Log.d("Database", recipe.ingredients.get(0).title);
-        //});
+        AppDatabase.getRecipe(1, recipe -> {
+            Log.d("Database", recipe.recipe.title);
+            Log.d("Database", recipe.ingredients.get(0).title);
+        });
 
-        //AppDatabase.getAccount(1, account -> {
-        //    Log.d("Database", account.username);
-        //    Log.d("Database", account.password);
-        //});
+        AppDatabase.getAccount(1, account -> {
+            Log.d("Database", account.username);
+            Log.d("Database", account.password);
+        });
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String lang = preferences.getString("language_preference", "en-US");
+        String sort = preferences.getString("sorting_preference", "Alp");
+        boolean veg = preferences.getBoolean("Vegetarian", false);
+
+        Log.d("Preferences", "lang=" + lang + ", sort=" + sort + " veg=" + veg);
     }
 
     @SuppressLint("StringFormatInvalid")
