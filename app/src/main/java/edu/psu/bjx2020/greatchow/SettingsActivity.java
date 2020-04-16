@@ -5,6 +5,7 @@ import android.preference.PreferenceFragment;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
+    private static final String LOG_TAG = "SettingsActivity";
 
     @Override
     protected void onCreate (Bundle savedInstanceState){

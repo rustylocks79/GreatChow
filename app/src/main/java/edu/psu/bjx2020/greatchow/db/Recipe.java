@@ -1,24 +1,76 @@
 package edu.psu.bjx2020.greatchow.db;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity(tableName = "recipes")
 public class Recipe {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "recipeId")
-    public long recipeId;
+    private String name;
+    private String ownerID;
+    private boolean vegetarian;
+    private boolean vegan;
+    private List<String> ingredients = new ArrayList<>();
+    private List<String> steps = new ArrayList<>();
 
-    @ColumnInfo(name = "title")
-    public String title;
+    public Recipe() {
 
-    @ColumnInfo(name = "description")
-    public String description;
+    }
 
-    public Recipe(long recipeId, String title, String description) {
-        this.recipeId = recipeId;
-        this.title = title;
-        this.description = description;
+    public Recipe(String name, String ownerID, boolean vegetarian, boolean vegan) {
+        this.name = name;
+        this.ownerID = ownerID;
+        this.vegetarian = vegetarian;
+        this.vegan = vegan;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
+    }
+
+    public boolean isVegetarian() {
+        return vegetarian;
+    }
+
+    public void setVegetarian(boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
+
+    public boolean isVegan() {
+        return vegan;
+    }
+
+    public void setVegan(boolean vegan) {
+        this.vegan = vegan;
+    }
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public List<String> getSteps() {
+        return steps;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "name='" + name + '\'' +
+                ", ownerID='" + ownerID + '\'' +
+                ", vegetarian=" + vegetarian +
+                ", vegan=" + vegan +
+                ", ingredients=" + ingredients +
+                ", steps=" + steps +
+                '}';
     }
 }
