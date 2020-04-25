@@ -54,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // VIEW TEST
+        addTest = findViewById(R.id.view_recipe_test);
+        addTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
 
         //firestore
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
