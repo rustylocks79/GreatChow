@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private Button calendar;
+    private Button addTest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +36,27 @@ public class MainActivity extends AppCompatActivity {
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,meal_schedule.class);
+                Intent intent = new Intent(MainActivity.this, meal_schedule.class);
                 startActivity(intent);
             }
+
         });
+
+        // ADD TEST
+        addTest = findViewById(R.id.add_recipe_test);
+        addTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
 
         //firestore
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
-        if(!firestoreGC.isAuthenticated()) {
+        if (!firestoreGC.isAuthenticated()) {
             //TODO: disable anonymous authentication
 
 //            List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -55,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 //                    RC_SIGN_IN);
 
             FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(this, task -> {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Log.d(TAG, "Authenticated successfully");
                     FirestoreGC.getInstance().onSuccessfulAuthentication();
                     postAuth();
@@ -103,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         //update a recipe
         firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 Recipe recipe = task.getResult().getDocuments().get(0).toObject(Recipe.class);
                 recipe.setName("Bacon and Eggs");
                 firestoreGC.updateRecipe(task.getResult().getDocuments().get(0).getReference(), recipe);
