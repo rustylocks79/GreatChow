@@ -22,7 +22,7 @@
 
     <!--  Strings for Content  -->
     <string name="ingredients">Ingredients</string>
-    <string name="add_image_and_title">Add Image and Title</string>
+    <string name="add_image">Add Image</string>
     <string name="enter_ingredient">Enter Ingredient</string>
     <string name="add_new_ingredient">Add New Ingredient</string>
     <string name="process">Process</string>
@@ -33,4 +33,7 @@
     <string name="test">TEST</string>
     <string name="preference_add_recipe">Add recipe</string>
     <string name="recipe_image">Recipe Image</string>
+    <string name="enter_name_of_recipe">Enter name of Recipe</string>
+    <string name="vegetarian">Vegetarian?</string>
+    <string name="vegan">Vegan?</string>
 </resources>

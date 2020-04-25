@@ -32,14 +32,27 @@
         android:contentDescription="@string/recipe_image" />
 
     <Button
-        android:id="@+id/add_image_title_button"
+        android:id="@+id/add_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_image_and_title"
+        android:text="@string/add_image"
         app:layout_constraintBottom_toBottomOf="@+id/recipe_picture_iv"
         app:layout_constraintEnd_toEndOf="@+id/recipe_picture_iv"
         app:layout_constraintStart_toStartOf="@+id/recipe_picture_iv"
         app:layout_constraintTop_toTopOf="@+id/recipe_picture_iv" />
+
+    <EditText
+        android:id="@+id/enter_title_et"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/enter_name_of_recipe"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv" />
 
     <TextView
         android:id="@+id/ingredients_title_tv"
@@ -50,7 +63,7 @@
         android:text="@string/ingredients"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/enter_title_et" />
 
     <LinearLayout
         android:id="@+id/ingredients_linearlayout"
@@ -152,18 +165,40 @@
         app:layout_constraintTop_toBottomOf="@+id/process_linearlayout" />
 
     <EditText
+        android:id="@+id/enter_nutrition_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:gravity="start|top"
-        android:ems="10"
-        android:id="@+id/enter_nutrition_et"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/nutrition_title_tv"
-        app:layout_constraintStart_toStartOf="@+id/nutrition_title_tv"
-        android:layout_marginStart="32dp"
+        android:ems="10"
+        android:gravity="start|top"
         android:hint="@string/enter_nutrition_info"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="@+id/nutrition_title_tv"
+        app:layout_constraintTop_toBottomOf="@+id/nutrition_title_tv" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_nutrition_et">
+
+        <CheckBox
+            android:id="@+id/vegetarian_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vegetarian" />
+
+        <CheckBox
+            android:id="@+id/vegan_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vegan" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

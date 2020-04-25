@@ -1,13 +1,14 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class AddRecipeActivity extends AppCompatActivity {
     int ingredientCounter;
@@ -23,24 +24,80 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
-            Snackbar.make(view, "replace with own action", Snackbar.LENGTH_SHORT)
+            /*
+                LIST OF LOCAL VARS:
+                    recipeName:     String
+                    recipeImg:      Drawable Resource
+                    ingredientList: ArrayList<String>
+                    processList:    ArrayList<String>
+                    nutrInfo:       String
+                    isVegetarian:   Boolean
+                    isVegan:        Boolean
+             */
+
+            EditText etTitle = findViewById(R.id.enter_title_et);
+            String recipeName = etTitle.getText().toString();
+
+            ImageView iv = findViewById(R.id.recipe_picture_iv);
+            Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
+
+            //fill ingredientList
+            ArrayList<String> ingredientList = new ArrayList<>();
+            EditText etIngredient;
+            int ingredientnum = 1000;
+            while(findViewById(ingredientnum) != null) {
+                etIngredient = findViewById(ingredientnum);
+                ingredientList.add(etIngredient.getText().toString());
+                ingredientnum++;
+            }
+
+            //fill processList
+            ArrayList<String> processList = new ArrayList<>();
+            EditText etProcess;
+            int processnum = 2000;
+            while(findViewById(processnum) != null) {
+                etProcess = findViewById(processnum);
+                processList.add(etProcess.getText().toString());
+                processnum++;
+            }
+
+            EditText etNutrition = findViewById(R.id.enter_nutrition_et);
+            String nutrInfo = etNutrition.getText().toString();
+
+            CheckBox vgtrnCB, vgnCB;
+            vgtrnCB = findViewById(R.id.vegetarian_cb);
+            vgnCB = findViewById(R.id.vegan_cb);
+            Boolean isVegetarian = vgtrnCB.isChecked();
+            Boolean isVegan = vgnCB.isChecked();
+
+            Snackbar.make(view, "Recipe Added - TEST", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
         });
+
+        //****************************************************************************************************//
+
+        //Set Image Button
+        //TODO: allow setting image
+//        Button addImgButton = findViewById(R.id.add_image_button);
+//        addImgButton.setOnClickListener(view -> {
+//
+//        });
 
 
         //****************************************************************************************************//
 
         //Dynamic Ingredient List
         ingredientCounter = 1000;
+        ingredientCounter++;
         findViewById(R.id.enter_ingredient_et_1).setId(ingredientCounter);
         LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);
         Button ingredientAddButton = findViewById(R.id.new_ingredient_button);
         ingredientAddButton.setOnClickListener(view -> {
             EditText editText = new EditText(AddRecipeActivity.this);
-            ingredientCounter++;
             editText.setId(ingredientCounter);
             editText.setHint(R.string.enter_ingredient);
             llIngredientContainer.addView(editText);
+            ingredientCounter++;
 
             //LOG STUFF
 //                View v1 = findViewById(1000);
