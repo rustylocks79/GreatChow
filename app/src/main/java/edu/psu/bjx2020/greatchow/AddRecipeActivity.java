@@ -7,7 +7,6 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
@@ -85,16 +84,15 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         //Dynamic Ingredient List
         ingredientCounter = 1000;
-        ingredientCounter++;
         findViewById(R.id.enter_ingredient_et_1).setId(ingredientCounter);
         LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);
         Button ingredientAddButton = findViewById(R.id.new_ingredient_button);
         ingredientAddButton.setOnClickListener(view -> {
             EditText editText = new EditText(AddRecipeActivity.this);
+            ingredientCounter++;
             editText.setId(ingredientCounter);
             editText.setHint(R.string.enter_ingredient);
             llIngredientContainer.addView(editText);
-            ingredientCounter++;
 
             //LOG STUFF
 //                View v1 = findViewById(1000);
