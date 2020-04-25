@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import edu.psu.bjx2020.greatchow.db.FirestoreGC;
+import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.util.ArrayList;
 
@@ -24,20 +26,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
-            /*
-                LIST OF LOCAL VARS:
-                    recipeName:     String
-                    recipeImg:      Drawable Resource
-                    ingredientList: ArrayList<String>
-                    processList:    ArrayList<String>
-                    nutrInfo:       String
-                    isVegetarian:   Boolean
-                    isVegan:        Boolean
-             */
-
             EditText etTitle = findViewById(R.id.enter_title_et);
-            String recipeName = etTitle.getText().toString();
-
             ImageView iv = findViewById(R.id.recipe_picture_iv);
             Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
 
@@ -62,16 +51,19 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
 
             EditText etNutrition = findViewById(R.id.enter_nutrition_et);
-            String nutrInfo = etNutrition.getText().toString();
+            CheckBox vgtrnCB = findViewById(R.id.vegetarian_cb);
+            CheckBox vgnCB = findViewById(R.id.vegan_cb);
 
-            CheckBox vgtrnCB, vgnCB;
-            vgtrnCB = findViewById(R.id.vegetarian_cb);
-            vgnCB = findViewById(R.id.vegan_cb);
-            Boolean isVegetarian = vgtrnCB.isChecked();
-            Boolean isVegan = vgnCB.isChecked();
-
-            Snackbar.make(view, "Recipe Added - TEST", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+            FirestoreGC firebaseGC = FirestoreGC.getInstance();
+            Recipe recipe = new Recipe();
+            recipe.setName(etTitle.getText().toString());
+            recipe.setOwnerID(firebaseGC.getOwnerID());
+            recipe.setNutritionalInfo(etNutrition.getText().toString());
+            recipe.setVegetarian(vgtrnCB.isChecked());
+            recipe.setVegan(vgnCB.isChecked());
+            recipe.setIngredients(ingredientList);
+            recipe.setSteps(processList);
+            firebaseGC.addRecipe(recipe);
         });
 
         //****************************************************************************************************//

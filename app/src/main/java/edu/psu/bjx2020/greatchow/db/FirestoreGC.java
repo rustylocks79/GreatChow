@@ -83,6 +83,10 @@ public class FirestoreGC {
         recipes.whereEqualTo("name", name).get().addOnCompleteListener(onCompleteListener);
     }
 
+    public String getOwnerID() {
+        return user.getUid();
+    }
+
 
     public void updateRecipe(DocumentReference reference, Recipe recipe) {
         reference.set(recipe);

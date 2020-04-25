@@ -12,10 +12,7 @@ import android.widget.Button;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
-import edu.psu.bjx2020.greatchow.db.Recipe;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
@@ -104,34 +101,34 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void postAuth() {
-        FirestoreGC firestoreGC = FirestoreGC.getInstance();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        firestoreGC.addRecipes(
-                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
-                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));
-
-        //show all vegetarian recipes;
-        firestoreGC.getAllRecipes(true, false, task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Recipe recipe = document.toObject(Recipe.class);
-                    Log.d(TAG, document.getId() + " => " + recipe.toString());
-                }
-            } else {
-                Log.e(TAG, "Error getting documents: ", task.getException());
-            }
-        });
-
-        //update a recipe
-        firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
-            if (task.isSuccessful()) {
-                Recipe recipe = task.getResult().getDocuments().get(0).toObject(Recipe.class);
-                recipe.setName("Bacon and Eggs");
-                firestoreGC.updateRecipe(task.getResult().getDocuments().get(0).getReference(), recipe);
-            } else {
-                Log.e(TAG, "Could not find scrambled eggs", task.getException());
-            }
-        });
+//        FirestoreGC firestoreGC = FirestoreGC.getInstance();
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        firestoreGC.addRecipes(
+//                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
+//                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));
+//
+//        //show all vegetarian recipes;
+//        firestoreGC.getAllRecipes(true, false, task -> {
+//            if (task.isSuccessful()) {
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    Recipe recipe = document.toObject(Recipe.class);
+//                    Log.d(TAG, document.getId() + " => " + recipe.toString());
+//                }
+//            } else {
+//                Log.e(TAG, "Error getting documents: ", task.getException());
+//            }
+//        });
+//
+//        //update a recipe
+//        firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
+//            if (task.isSuccessful()) {
+//                Recipe recipe = task.getResult().getDocuments().get(0).toObject(Recipe.class);
+//                recipe.setName("Bacon and Eggs");
+//                firestoreGC.updateRecipe(task.getResult().getDocuments().get(0).getReference(), recipe);
+//            } else {
+//                Log.e(TAG, "Could not find scrambled eggs", task.getException());
+//            }
+//        });
     }
 
 
