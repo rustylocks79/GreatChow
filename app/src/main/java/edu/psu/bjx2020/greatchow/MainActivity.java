@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,12 +20,26 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "MainActivity";
 
-
+    private Button calendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // calendar
+        calendar = (Button) findViewById(R.id.calendar);
+        Intent incoming = getIntent();
+        String date = incoming.getStringExtra("date");
+
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,meal_schedule.class);
+                startActivity(intent);
+            }
+        });
+
+        //firestore
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         if(!firestoreGC.isAuthenticated()) {
             //TODO: disable anonymous authentication

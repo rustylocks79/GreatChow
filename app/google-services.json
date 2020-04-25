@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "603688040925",
+    "firebase_url": "https://greatchow-e9e95.firebaseio.com",
+    "project_id": "greatchow-e9e95",
+    "storage_bucket": "greatchow-e9e95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603688040925:android:01ec5d5269d2425f8f5e34",
+        "android_client_info": {
+          "package_name": "edu.psu.bjx2020.greatchow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603688040925-55jjkqie5lrc3m535de0o9jkkup9ls9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUXZbBj5quun5uildyiG05qHOLYbXdpYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603688040925-55jjkqie5lrc3m535de0o9jkkup9ls9l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
