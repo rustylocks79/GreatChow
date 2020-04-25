@@ -6,6 +6,7 @@ import java.util.List;
 public class Recipe {
     private String name;
     private String ownerID;
+    private String nutritionalInfo;
     private boolean vegetarian;
     private boolean vegan;
     private List<String> ingredients = new ArrayList<>();
@@ -38,6 +39,14 @@ public class Recipe {
         this.ownerID = ownerID;
     }
 
+    public String getNutritionalInfo() {
+        return nutritionalInfo;
+    }
+
+    public void setNutritionalInfo(String nutritionalInfo) {
+        this.nutritionalInfo = nutritionalInfo;
+    }
+
     public boolean isVegetarian() {
         return vegetarian;
     }
@@ -58,8 +67,16 @@ public class Recipe {
         return ingredients;
     }
 
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public List<String> getSteps() {
         return steps;
+    }
+
+    public void setSteps(List<String> steps) {
+        this.steps = steps;
     }
 
     @Override

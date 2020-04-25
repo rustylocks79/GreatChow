@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_add_recipe"
     tools:context=".AddRecipeActivity">
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         tools:srcCompat="?attr/colorAccent"
         android:id="@+id/recipe_picture_iv"
         android:layout_marginTop="16dp"
@@ -21,107 +25,180 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ingredients_title_tv"
         android:layout_marginBottom="500dp"
         tools:visibility="visible"
-        app:srcCompat="@android:color/holo_purple" />
-
-    <TextView
-        android:text="@string/ingredients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ingredients_title_tv"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:textSize="30sp" />
+        app:srcCompat="@android:color/holo_purple"
+        android:contentDescription="@string/recipe_image" />
 
     <Button
-        android:text="@string/add_image_and_title"
+        android:id="@+id/add_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_image_title_button"
-        app:layout_constraintTop_toTopOf="@+id/recipe_picture_iv"
+        android:text="@string/add_image"
         app:layout_constraintBottom_toBottomOf="@+id/recipe_picture_iv"
+        app:layout_constraintEnd_toEndOf="@+id/recipe_picture_iv"
         app:layout_constraintStart_toStartOf="@+id/recipe_picture_iv"
-        app:layout_constraintEnd_toEndOf="@+id/recipe_picture_iv" />
+        app:layout_constraintTop_toTopOf="@+id/recipe_picture_iv" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:id="@+id/enter_title_et"
+        android:layout_width="213dp"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:id="@+id/enter_ingredient_et_1"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/ingredients_title_tv"
-        app:layout_constraintStart_toStartOf="@+id/ingredients_title_tv"
-        android:layout_marginStart="32dp"
-        android:hint="@string/enter_ingredient" />
-
-    <Button
-        android:text="@string/add_new_ingredient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_ingredient_button"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/enter_ingredient_et_1"
-        app:layout_constraintStart_toStartOf="@+id/enter_ingredient_et_1" />
+        android:hint="@string/enter_name_of_recipe"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv" />
 
     <TextView
-        android:text="@string/process"
+        android:id="@+id/ingredients_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/ingredients"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_title_et" />
+
+    <LinearLayout
+        android:id="@+id/ingredients_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_title_tv">
+
+        <LinearLayout
+            android:id="@+id/ll_ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/enter_ingredient_et_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/enter_ingredient"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/new_ingredient_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_new_ingredient" />
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/process_title_tv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/process"
         android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/new_ingredient_button"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_linearlayout" />
+
+    <LinearLayout
+        android:id="@+id/process_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process_title_tv">
+
+        <LinearLayout
+            android:id="@+id/ll_process_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/enter_process_et_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/enter_process_step"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/new_process_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_process_step" />
+    </LinearLayout>
 
     <TextView
-        android:text="@string/nutritional_information"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/nutrition_title_tv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/nutritional_information"
         android:textSize="30sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/new_process_button" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process_linearlayout" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/enter_process_et_1"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/process_title_tv"
-        app:layout_constraintStart_toStartOf="@+id/process_title_tv"
-        android:layout_marginStart="32dp"
-        android:hint="@string/enter_process_step" />
-
-    <Button
-        android:text="@string/add_process_step"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_process_button"
-        app:layout_constraintTop_toBottomOf="@+id/enter_process_et_1"
-        app:layout_constraintStart_toStartOf="@+id/enter_process_et_1"
-        android:layout_marginTop="16dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:gravity="start|top"
-        android:ems="10"
         android:id="@+id/enter_nutrition_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/nutrition_title_tv"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/enter_nutrition_info"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="@+id/nutrition_title_tv"
-        android:layout_marginStart="32dp"
-        android:hint="@string/enter_nutrition_info" />
+        app:layout_constraintTop_toBottomOf="@+id/nutrition_title_tv" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_nutrition_et">
+
+        <CheckBox
+            android:id="@+id/vegetarian_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vegetarian" />
+
+        <CheckBox
+            android:id="@+id/vegan_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vegan" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
