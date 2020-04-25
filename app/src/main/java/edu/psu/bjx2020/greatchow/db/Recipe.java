@@ -1,9 +1,10 @@
 package edu.psu.bjx2020.greatchow.db;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private String name;
     private String ownerID;
     private String nutritionalInfo;

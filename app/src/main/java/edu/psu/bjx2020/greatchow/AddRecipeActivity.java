@@ -3,14 +3,18 @@ package edu.psu.bjx2020.greatchow;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddRecipeActivity extends AppCompatActivity {
     int ingredientCounter;
@@ -26,7 +30,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
-            EditText etTitle = findViewById(R.id.enter_title_et);
+            EditText etName = findViewById(R.id.enter_title_et);
 
             ImageView iv = findViewById(R.id.recipe_picture_iv);
             Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
@@ -42,12 +46,12 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
 
             //fill processList
-            ArrayList<String> processList = new ArrayList<>();
-            EditText etProcess;
+            ArrayList<String> stepsList = new ArrayList<>();
+            EditText etSteps;
             int processnum = 2000;
             while(findViewById(processnum) != null) {
-                etProcess = findViewById(processnum);
-                processList.add(etProcess.getText().toString());
+                etSteps = findViewById(processnum);
+                stepsList.add(etSteps.getText().toString());
                 processnum++;
             }
 
@@ -57,13 +61,24 @@ public class AddRecipeActivity extends AppCompatActivity {
 
             FirestoreGC firebaseGC = FirestoreGC.getInstance();
             Recipe recipe = new Recipe();
-            recipe.setName(etTitle.getText().toString());
+            String name = etName.getText().toString();
+            if(name.equals("")) {
+                Snackbar.make(view, "name can not be empty. ", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            recipe.setName(name);
             recipe.setOwnerID(firebaseGC.getOwnerID());
             recipe.setNutritionalInfo(etNutrition.getText().toString());
             recipe.setVegetarian(vgtrnCB.isChecked());
             recipe.setVegan(vgnCB.isChecked());
+            if(ingredientList.isEmpty()) {
+                Snackbar.make(view, "ingredients must contain at least one item. ", Snackbar.LENGTH_SHORT).show();
+            }
             recipe.setIngredients(ingredientList);
-            recipe.setSteps(processList);
+            if(stepsList.isEmpty()) {
+                Snackbar.make(view, "steps must contain at least one item.", Snackbar.LENGTH_SHORT).show();
+            }
+            recipe.setSteps(stepsList);
             firebaseGC.addRecipe(recipe);
 
             Intent intent = new Intent(AddRecipeActivity.this, MainActivity.class);
