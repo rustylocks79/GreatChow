@@ -9,4 +9,14 @@
     <string name="list1">edu.psu.bjx2020.greatchow.list1</string>
     <string name="list2">edu.psu.bjx2020.greatchow.list2</string>
     <string name="checkbox">edu.psu.bjx2020.greatchow.checkbox</string>
+    <string name="title_activity_view_recipe">ViewRecipeActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_add_recipe">AddRecipeActivity</string>
 </resources>

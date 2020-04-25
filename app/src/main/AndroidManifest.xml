@@ -9,7 +9,15 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".meal_schedule">
+        <activity
+                android:name=".AddRecipeActivity"
+                android:label="@string/title_activity_add_recipe"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".ViewRecipeActivity"
+                android:label="@string/title_activity_view_recipe"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -20,7 +28,7 @@
         </activity>
         <activity
                 android:name=".SettingsActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="fullSensor" />
     </application>
 
 </manifest>
