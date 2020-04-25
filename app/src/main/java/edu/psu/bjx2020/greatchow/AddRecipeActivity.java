@@ -1,5 +1,6 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.*;
@@ -27,6 +28,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
             EditText etTitle = findViewById(R.id.enter_title_et);
+
             ImageView iv = findViewById(R.id.recipe_picture_iv);
             Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
 
@@ -64,6 +66,9 @@ public class AddRecipeActivity extends AppCompatActivity {
             recipe.setIngredients(ingredientList);
             recipe.setSteps(processList);
             firebaseGC.addRecipe(recipe);
+
+            Intent intent = new Intent(AddRecipeActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
         //****************************************************************************************************//
