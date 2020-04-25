@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // toolbar
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         // calendar
         calendar = (Button) findViewById(R.id.calendar);
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
 //TODO: disable anonymous authentication
 
 //    @Override
@@ -129,12 +135,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // inflate menu
     @SuppressLint("StringFormatInvalid")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        Log.d(TAG, "onCreateOptionsMenu: ");
+        //Log.d(TAG, "onCreateOptionsMenu: ");
         return true;
     }
 
@@ -142,11 +149,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_menu_setting) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
+        switch (id) {
+            case R.id.action_menu_setting: {
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            }
+            case R.id.action_add_recipe: {
+                startActivity(new Intent(this,AddRecipeActivity.class));
+                return true;
+            }
+            default:
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 

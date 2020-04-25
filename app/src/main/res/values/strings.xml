@@ -31,5 +31,5 @@
     <string name="add_process_step">Add Process Step</string>
     <string name="enter_nutrition_info">Enter Nutrition Info</string>
     <string name="test">TEST</string>
-    <string name="recipe_image">Recipe_Image</string>
+    <string name="preference_add_recipe">Add recipe</string>
 </resources>
