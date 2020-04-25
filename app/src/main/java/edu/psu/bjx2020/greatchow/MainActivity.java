@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         // calendar
         calendar = (Button) findViewById(R.id.calendar);
         Intent incoming = getIntent();
-        String date = incoming.getStringExtra("date");
 
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
