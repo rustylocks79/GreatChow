@@ -19,4 +19,16 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_add_recipe">AddRecipeActivity</string>
+
+    <!--  Strings for Content  -->
+    <string name="ingredients">Ingredients</string>
+    <string name="add_image_and_title">Add Image and Title</string>
+    <string name="enter_ingredient">Enter Ingredient</string>
+    <string name="add_new_ingredient">Add New Ingredient</string>
+    <string name="process">Process</string>
+    <string name="nutritional_information">Nutritional Information</string>
+    <string name="enter_process_step">Enter Process Step</string>
+    <string name="add_process_step">Add Process Step</string>
+    <string name="enter_nutrition_info">Enter Nutrition Info</string>
+    <string name="test">TEST</string>
 </resources>
