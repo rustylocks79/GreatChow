@@ -24,7 +24,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="500dp"
         tools:visibility="visible"
-        app:srcCompat="@android:color/holo_purple" />
+        app:srcCompat="@android:color/holo_purple"
+        android:contentDescription="@string/recipe_image" />
 
     <TextView
         android:text="@string/ingredients"
