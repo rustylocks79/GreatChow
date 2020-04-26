@@ -1,7 +1,6 @@
 package edu.psu.bjx2020.greatchow.db;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +17,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 public class FirestoreGC {
     private static final String TAG = "FirestoreGC";
@@ -92,32 +92,24 @@ public class FirestoreGC {
         recipes.whereEqualTo("name", name).get().addOnCompleteListener(onCompleteListener);
     }
 
-    public void uploadImage(Bitmap bitmap) {
+    public String uploadRecipeImage(Bitmap bitmap, String ownerID) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        String path = "images/" + ownerID + "/" + UUID.randomUUID() + ".jpg";
+        StorageReference storageRef = storage.getReference().child("images/" + ownerID + "/" + UUID.randomUUID() + ".jpg");
         UploadTask uploadTask = storageRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-            }
-        });
+        uploadTask
+                .addOnFailureListener(exception -> Log.e(TAG, "Could not upload photo. ", exception))
+                .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "uploaded photo"));
+        return path;
     }
 
     public String getOwnerID() {
         return user.getUid();
     }
-
 
     public void updateRecipe(DocumentReference reference, Recipe recipe) {
         reference.set(recipe);
