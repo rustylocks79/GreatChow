@@ -1,9 +1,12 @@
 package edu.psu.bjx2020.greatchow;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,10 +16,11 @@ import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AddRecipeActivity extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap image;
+
     int ingredientCounter;
     int processCounter;
 
@@ -31,9 +35,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
             EditText etName = findViewById(R.id.enter_title_et);
-
-            ImageView iv = findViewById(R.id.recipe_picture_iv);
-            Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
 
             //fill ingredientList
             ArrayList<String> ingredientList = new ArrayList<>();
@@ -59,7 +60,13 @@ public class AddRecipeActivity extends AppCompatActivity {
             CheckBox vgtrnCB = findViewById(R.id.vegetarian_cb);
             CheckBox vgnCB = findViewById(R.id.vegan_cb);
 
+            ImageView imageView = findViewById(R.id.recipe_picture_iv);
+            imageView.setDrawingCacheEnabled(true);
+            imageView.buildDrawingCache();
+
             FirestoreGC firebaseGC = FirestoreGC.getInstance();
+            firebaseGC.uploadImage(((BitmapDrawable) imageView.getDrawable()).getBitmap());
+
             Recipe recipe = new Recipe();
             String name = etName.getText().toString();
             if(name.equals("")) {
@@ -136,9 +143,27 @@ public class AddRecipeActivity extends AppCompatActivity {
 //                View vOther = findViewById(processCounter);
 //                Log.d("first", "" + v1.getId());
 //                Log.d("other", "" + vOther.getId());
+
         });
+
+        Button btnAddImage = findViewById(R.id.add_image_button);
+        btnAddImage.setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        });
+
+
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            image = (Bitmap) extras.get("data");
+            ImageView iv = findViewById(R.id.recipe_picture_iv);
+            iv.setImageBitmap(image);
+        }
+    }
 }

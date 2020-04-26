@@ -9,16 +9,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
@@ -129,16 +126,24 @@ public class MainActivity extends AppCompatActivity {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //Generate list of Buttons
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
-        for(int i=0; i<50; i++) {
-            Button button = new Button(MainActivity.this);
-            button.setText("TESTER " + i);
-            button.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-                startActivity(intent); });
-            llRecipeList.addView(button);
-        }
+        firestoreGC.getAllRecipes(true, false, task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Recipe recipe = document.toObject(Recipe.class);
+                    Button button = new Button(MainActivity.this);
+                    button.setText(recipe.getName());
+                    button.setOnClickListener(v -> {
+                        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+                        startActivity(intent);
+                    });
+                    llRecipeList.addView(button);
+                    Log.d(TAG, document.getId() + " => " + recipe.toString());
+                }
+            } else {
+                Log.e(TAG, "Error getting documents: ", task.getException());
+            }
+        });
 
 //        firestoreGC.addRecipes(
 //                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
