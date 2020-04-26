@@ -31,7 +31,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);
         for(int i=0; i<recipe.getIngredients().size(); i++) {
             TextView tv = new TextView(ViewRecipeActivity.this);
-            tv.setText(recipe.getIngredients().get(i));
+            tv.setText((i+1) + ") " + recipe.getIngredients().get(i));
             tv.setTextSize(18);
             llIngredientContainer.addView(tv);
         }
@@ -39,7 +39,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         LinearLayout llProcessContainer = findViewById(R.id.ll_process_container);
         for(int i=0; i<recipe.getSteps().size(); i++) {
             TextView tv = new TextView(ViewRecipeActivity.this);
-            tv.setText(recipe.getSteps().get(i));
+            tv.setText((i+1) + ")" + recipe.getSteps().get(i));
             tv.setTextSize(18);
             llProcessContainer.addView(tv);
         }
