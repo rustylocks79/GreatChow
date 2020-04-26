@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private Button calendar;
-    private Button addTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,40 +39,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //        calendar.setOnClickListener(v -> {
 //            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
-//            startActivity(intent);
-//        });
-
-        // ADD TEST
-//        addTest = findViewById(R.id.add_recipe_test);
-//        addTest.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-//            startActivity(intent);
-//        });
-
-        // VIEW TEST
-//        addTest = findViewById(R.id.view_recipe_test);
-//        addTest.setOnClickListener(v -> {
-//            ArrayList<String> ingredientList = new ArrayList<>();
-//            ingredientList.add("32 lbs. Ground Beef");
-//            ingredientList.add("18 lbs. Orange Blossom Honey");
-//            ingredientList.add("2 tbsp. Heavy Cream");
-//
-//            ArrayList<String> processList = new ArrayList<>();
-//            processList.add("Mix ingredients in large tub");
-//            processList.add("Consume at maximum pace");
-//
-//            FirestoreGC firebaseGC = FirestoreGC.getInstance();
-//            Recipe recipe = new Recipe();
-//            recipe.setName("The Super Ham Soup");
-//            recipe.setOwnerID(firebaseGC.getOwnerID());
-//            recipe.setNutritionalInfo("MAXIMUM NUTRITION");
-//            recipe.setVegetarian(true);
-//            recipe.setVegan(true);
-//            recipe.setIngredients(ingredientList);
-//            recipe.setSteps(processList);
-//
-//            Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
-//            intent.putExtra("recipe", recipe);
 //            startActivity(intent);
 //        });
 
@@ -127,14 +92,15 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
-        firestoreGC.getAllRecipes(true, false, task -> {
+        firestoreGC.getAllRecipes(false, false, task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Recipe recipe = document.toObject(Recipe.class);
                     Button button = new Button(MainActivity.this);
                     button.setText(recipe.getName());
                     button.setOnClickListener(v -> {
-                        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
+                        intent.putExtra("recipe", recipe);
                         startActivity(intent);
                     });
                     llRecipeList.addView(button);
