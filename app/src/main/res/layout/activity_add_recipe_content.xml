@@ -43,7 +43,7 @@
 
     <EditText
         android:id="@+id/enter_title_et"
-        android:layout_width="213dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"

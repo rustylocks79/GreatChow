@@ -8,9 +8,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
@@ -33,48 +37,48 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         // calendar
-        calendar = (Button) findViewById(R.id.calendar);
-        Intent incoming = getIntent();
-        String date = incoming.getStringExtra("date");
-
-        calendar.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
-            startActivity(intent);
-        });
+//        calendar = (Button) findViewById(R.id.calendar);
+//        Intent incoming = getIntent();
+//        String date = incoming.getStringExtra("date");
+//
+//        calendar.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
+//            startActivity(intent);
+//        });
 
         // ADD TEST
-        addTest = findViewById(R.id.add_recipe_test);
-        addTest.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-            startActivity(intent);
-        });
+//        addTest = findViewById(R.id.add_recipe_test);
+//        addTest.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+//            startActivity(intent);
+//        });
 
         // VIEW TEST
-        addTest = findViewById(R.id.view_recipe_test);
-        addTest.setOnClickListener(v -> {
-            ArrayList<String> ingredientList = new ArrayList<>();
-            ingredientList.add("32 lbs. Ground Beef");
-            ingredientList.add("18 lbs. Orange Blossom Honey");
-            ingredientList.add("2 tbsp. Heavy Cream");
-
-            ArrayList<String> processList = new ArrayList<>();
-            processList.add("Mix ingredients in large tub");
-            processList.add("Consume at maximum pace");
-
-            FirestoreGC firebaseGC = FirestoreGC.getInstance();
-            Recipe recipe = new Recipe();
-            recipe.setName("The Super Ham Soup");
-            recipe.setOwnerID(firebaseGC.getOwnerID());
-            recipe.setNutritionalInfo("MAXIMUM NUTRITION");
-            recipe.setVegetarian(true);
-            recipe.setVegan(true);
-            recipe.setIngredients(ingredientList);
-            recipe.setSteps(processList);
-
-            Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
-            intent.putExtra("recipe", recipe);
-            startActivity(intent);
-        });
+//        addTest = findViewById(R.id.view_recipe_test);
+//        addTest.setOnClickListener(v -> {
+//            ArrayList<String> ingredientList = new ArrayList<>();
+//            ingredientList.add("32 lbs. Ground Beef");
+//            ingredientList.add("18 lbs. Orange Blossom Honey");
+//            ingredientList.add("2 tbsp. Heavy Cream");
+//
+//            ArrayList<String> processList = new ArrayList<>();
+//            processList.add("Mix ingredients in large tub");
+//            processList.add("Consume at maximum pace");
+//
+//            FirestoreGC firebaseGC = FirestoreGC.getInstance();
+//            Recipe recipe = new Recipe();
+//            recipe.setName("The Super Ham Soup");
+//            recipe.setOwnerID(firebaseGC.getOwnerID());
+//            recipe.setNutritionalInfo("MAXIMUM NUTRITION");
+//            recipe.setVegetarian(true);
+//            recipe.setVegan(true);
+//            recipe.setIngredients(ingredientList);
+//            recipe.setSteps(processList);
+//
+//            Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
+//            intent.putExtra("recipe", recipe);
+//            startActivity(intent);
+//        });
 
 
         //firestore
@@ -122,8 +126,20 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void postAuth() {
-//        FirestoreGC firestoreGC = FirestoreGC.getInstance();
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirestoreGC firestoreGC = FirestoreGC.getInstance();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Generate list of Buttons
+        LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
+        for(int i=0; i<50; i++) {
+            Button button = new Button(MainActivity.this);
+            button.setText("TESTER " + i);
+            button.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+                startActivity(intent); });
+            llRecipeList.addView(button);
+        }
+
 //        firestoreGC.addRecipes(
 //                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
 //                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));
