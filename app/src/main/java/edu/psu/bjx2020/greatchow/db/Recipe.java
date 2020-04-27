@@ -7,6 +7,7 @@ import java.util.List;
 public class Recipe implements Serializable {
     private String name;
     private String ownerID;
+    private String pathToImage;
     private String nutritionalInfo;
     private boolean vegetarian;
     private boolean vegan;
@@ -38,6 +39,14 @@ public class Recipe implements Serializable {
 
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
+    }
+
+    public String getPathToImage() {
+        return pathToImage;
+    }
+
+    public void setPathToImage(String pathToImage) {
+        this.pathToImage = pathToImage;
     }
 
     public String getNutritionalInfo() {

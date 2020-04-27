@@ -8,20 +8,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "MainActivity";
 
     private Button calendar;
-    private Button addTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,47 +33,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         // calendar
-        calendar = (Button) findViewById(R.id.calendar);
-        Intent incoming = getIntent();
-
-        calendar.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
-            startActivity(intent);
-        });
-
-        // ADD TEST
-        addTest = findViewById(R.id.add_recipe_test);
-        addTest.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-            startActivity(intent);
-        });
-
-        // VIEW TEST
-        addTest = findViewById(R.id.view_recipe_test);
-        addTest.setOnClickListener(v -> {
-            ArrayList<String> ingredientList = new ArrayList<>();
-            ingredientList.add("32 lbs. Ground Beef");
-            ingredientList.add("18 lbs. Orange Blossom Honey");
-            ingredientList.add("2 tbsp. Heavy Cream");
-
-            ArrayList<String> processList = new ArrayList<>();
-            processList.add("Mix ingredients in large tub");
-            processList.add("Consume at maximum pace");
-
-            FirestoreGC firebaseGC = FirestoreGC.getInstance();
-            Recipe recipe = new Recipe();
-            recipe.setName("The Super Ham Soup");
-            recipe.setOwnerID(firebaseGC.getOwnerID());
-            recipe.setNutritionalInfo("MAXIMUM NUTRITION");
-            recipe.setVegetarian(true);
-            recipe.setVegan(true);
-            recipe.setIngredients(ingredientList);
-            recipe.setSteps(processList);
-
-            Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
-            intent.putExtra("recipe", recipe);
-            startActivity(intent);
-        });
+//        calendar = (Button) findViewById(R.id.calendar);
+//        Intent incoming = getIntent();
+//        String date = incoming.getStringExtra("date");
+//
+//        calendar.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
+//            startActivity(intent);
+//        });
 
 
         //firestore
@@ -121,8 +88,29 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void postAuth() {
-//        FirestoreGC firestoreGC = FirestoreGC.getInstance();
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirestoreGC firestoreGC = FirestoreGC.getInstance();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
+        firestoreGC.getAllRecipes(false, false, task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Recipe recipe = document.toObject(Recipe.class);
+                    Button button = new Button(MainActivity.this);
+                    button.setText(recipe.getName());
+                    button.setOnClickListener(v -> {
+                        Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
+                        intent.putExtra("recipe", recipe);
+                        startActivity(intent);
+                    });
+                    llRecipeList.addView(button);
+                    Log.d(TAG, document.getId() + " => " + recipe.toString());
+                }
+            } else {
+                Log.e(TAG, "Error getting documents: ", task.getException());
+            }
+        });
+
 //        firestoreGC.addRecipes(
 //                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
 //                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));

@@ -1,10 +1,15 @@
 package edu.psu.bjx2020.greatchow;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,10 +18,12 @@ import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AddRecipeActivity extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_CAPTURE = 0;
+    private static final int REQUEST_IMAGE_STORAGE = 1;
+    private ImageView ivRecipe;
+
     int ingredientCounter;
     int processCounter;
 
@@ -28,74 +35,70 @@ public class AddRecipeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ivRecipe = findViewById(R.id.recipe_picture_iv);
+
         FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(view -> {
             EditText etName = findViewById(R.id.enter_title_et);
+            String name = etName.getText().toString();
+            if (name.equals("")) {
+                Snackbar.make(view, "name can not be empty. ", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
 
-            ImageView iv = findViewById(R.id.recipe_picture_iv);
-            Drawable recipeImg = iv.getDrawable();  //this should work, probably, test it
-
-            //fill ingredientList
             ArrayList<String> ingredientList = new ArrayList<>();
             EditText etIngredient;
             int ingredientnum = 1000;
-            while(findViewById(ingredientnum) != null) {
+            while (findViewById(ingredientnum) != null) {
                 etIngredient = findViewById(ingredientnum);
                 ingredientList.add(etIngredient.getText().toString());
                 ingredientnum++;
             }
 
-            //fill processList
+            if (ingredientList.isEmpty()) {
+                Snackbar.make(view, "ingredients must contain at least one item. ", Snackbar.LENGTH_SHORT).show();
+            }
+
             ArrayList<String> stepsList = new ArrayList<>();
             EditText etSteps;
-            int processnum = 2000;
-            while(findViewById(processnum) != null) {
-                etSteps = findViewById(processnum);
+            int stepnum = 2000;
+            while (findViewById(stepnum) != null) {
+                etSteps = findViewById(stepnum);
                 stepsList.add(etSteps.getText().toString());
-                processnum++;
+                stepnum++;
+            }
+
+            if (stepsList.isEmpty()) {
+                Snackbar.make(view, "steps must contain at least one item.", Snackbar.LENGTH_SHORT).show();
             }
 
             EditText etNutrition = findViewById(R.id.enter_nutrition_et);
-            CheckBox vgtrnCB = findViewById(R.id.vegetarian_cb);
-            CheckBox vgnCB = findViewById(R.id.vegan_cb);
+            String nutritionalInfo = etNutrition.getText().toString();
+
+            CheckBox vegetarianCB = findViewById(R.id.vegetarian_cb);
+            boolean vegetarian = vegetarianCB.isChecked();
+
+            CheckBox veganCB = findViewById(R.id.vegan_cb);
+            boolean vegan = veganCB.isChecked();
+
+            ImageView imageView = findViewById(R.id.recipe_picture_iv);
 
             FirestoreGC firebaseGC = FirestoreGC.getInstance();
+            String pathToImage = firebaseGC.uploadRecipeImage(((BitmapDrawable) imageView.getDrawable()).getBitmap(), firebaseGC.getOwnerID());
             Recipe recipe = new Recipe();
-            String name = etName.getText().toString();
-            if(name.equals("")) {
-                Snackbar.make(view, "name can not be empty. ", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
             recipe.setName(name);
             recipe.setOwnerID(firebaseGC.getOwnerID());
-            recipe.setNutritionalInfo(etNutrition.getText().toString());
-            recipe.setVegetarian(vgtrnCB.isChecked());
-            recipe.setVegan(vgnCB.isChecked());
-            if(ingredientList.isEmpty()) {
-                Snackbar.make(view, "ingredients must contain at least one item. ", Snackbar.LENGTH_SHORT).show();
-            }
+            recipe.setPathToImage(pathToImage);
+            recipe.setNutritionalInfo(nutritionalInfo);
+            recipe.setVegetarian(vegetarian);
+            recipe.setVegan(vegan);
             recipe.setIngredients(ingredientList);
-            if(stepsList.isEmpty()) {
-                Snackbar.make(view, "steps must contain at least one item.", Snackbar.LENGTH_SHORT).show();
-            }
             recipe.setSteps(stepsList);
             firebaseGC.addRecipe(recipe);
 
             Intent intent = new Intent(AddRecipeActivity.this, MainActivity.class);
             startActivity(intent);
         });
-
-        //****************************************************************************************************//
-
-        //Set Image Button
-        //TODO: allow setting image
-//        Button addImgButton = findViewById(R.id.add_image_button);
-//        addImgButton.setOnClickListener(view -> {
-//
-//        });
-
-
-        //****************************************************************************************************//
 
         //Dynamic Ingredient List
         ingredientCounter = 1000;
@@ -136,9 +139,53 @@ public class AddRecipeActivity extends AppCompatActivity {
 //                View vOther = findViewById(processCounter);
 //                Log.d("first", "" + v1.getId());
 //                Log.d("other", "" + vOther.getId());
+
+        });
+
+        Button btnAddImage = findViewById(R.id.add_image_button);
+        btnAddImage.setOnClickListener(v -> {
+            final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Choose your profile picture");
+            builder.setItems(options, (dialog, item) -> {
+                if (options[item].equals("Take Photo")) {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, REQUEST_IMAGE_STORAGE);
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         });
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_IMAGE_CAPTURE:
+                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                    ivRecipe.setImageBitmap(selectedImage);
+                    break;
+                case REQUEST_IMAGE_STORAGE:
+                    Uri selectedImageUri = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    if (selectedImageUri != null) {
+                        Cursor cursor = getContentResolver().query(selectedImageUri,
+                                filePathColumn, null, null, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            String picturePath = cursor.getString(columnIndex);
+                            ivRecipe.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                            cursor.close();
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -23,10 +25,35 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         recipe = (Recipe) getIntent().getExtras().getSerializable("recipe");
 
+        TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
+        recipeNameTV.setText(recipe.getName());
+
+        LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);
+        for(int i=0; i<recipe.getIngredients().size(); i++) {
+            TextView tv = new TextView(ViewRecipeActivity.this);
+            tv.setText((i+1) + ") " + recipe.getIngredients().get(i));
+            tv.setTextSize(18);
+            llIngredientContainer.addView(tv);
+        }
+
+        LinearLayout llProcessContainer = findViewById(R.id.ll_process_container);
+        for(int i=0; i<recipe.getSteps().size(); i++) {
+            TextView tv = new TextView(ViewRecipeActivity.this);
+            tv.setText((i+1) + ")" + recipe.getSteps().get(i));
+            tv.setTextSize(18);
+            llProcessContainer.addView(tv);
+        }
+
+        TextView nutrInfoTV = findViewById(R.id.nutrition_info_tv);
+        nutrInfoTV.setText(recipe.getName());
+
+        //TODO: in xml add TVs to show vegan/vegetarian
+
         FloatingActionButton fab = findViewById(R.id.view_fab);
         fab.setOnClickListener(view -> {
-            Snackbar.make(view, recipe.getName(), Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+            // TODO: make fab delete current recipe
+//            Snackbar.make(view, recipe.getName(), Snackbar.LENGTH_SHORT)
+//                    .setAction("Action", null).show();
         });
     }
 }

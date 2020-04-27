@@ -1,14 +1,23 @@
 package edu.psu.bjx2020.greatchow.db;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 public class FirestoreGC {
     private static final String TAG = "FirestoreGC";
@@ -83,10 +92,24 @@ public class FirestoreGC {
         recipes.whereEqualTo("name", name).get().addOnCompleteListener(onCompleteListener);
     }
 
+    public String uploadRecipeImage(Bitmap bitmap, String ownerID) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        String path = "images/" + ownerID + "/" + UUID.randomUUID() + ".jpg";
+        StorageReference storageRef = storage.getReference().child("images/" + ownerID + "/" + UUID.randomUUID() + ".jpg");
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask
+                .addOnFailureListener(exception -> Log.e(TAG, "Could not upload photo. ", exception))
+                .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "uploaded photo"));
+        return path;
+    }
+
     public String getOwnerID() {
         return user.getUid();
     }
-
 
     public void updateRecipe(DocumentReference reference, Recipe recipe) {
         reference.set(recipe);
