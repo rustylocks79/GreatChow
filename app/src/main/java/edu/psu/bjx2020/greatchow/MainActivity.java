@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "Authentication Failed");
                 }
             });
+        } else {
+            postAuth();
         }
     }
 

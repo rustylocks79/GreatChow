@@ -53,31 +53,4 @@ public class Initializer {
 
         firestoreGC.addRecipes(superHam, boiledStuff, stickersNGlue);
     }
-
-    //        firestoreGC.addRecipes(
-//                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
-//                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));
-//
-//        //show all vegetarian recipes;
-//        firestoreGC.getAllRecipes(true, false, task -> {
-//            if (task.isSuccessful()) {
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//                    Recipe recipe = document.toObject(Recipe.class);
-//                    Log.d(TAG, document.getId() + " => " + recipe.toString());
-//                }
-//            } else {
-//                Log.e(TAG, "Error getting documents: ", task.getException());
-//            }
-//        });
-//
-//        //update a recipe
-//        firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
-//            if (task.isSuccessful()) {
-//                Recipe recipe = task.getResult().getDocuments().get(0).toObject(Recipe.class);
-//                recipe.setName("Bacon and Eggs");
-//                firestoreGC.updateRecipe(task.getResult().getDocuments().get(0).getReference(), recipe);
-//            } else {
-//                Log.e(TAG, "Could not find scrambled eggs", task.getException());
-//            }
-//        });
 }
