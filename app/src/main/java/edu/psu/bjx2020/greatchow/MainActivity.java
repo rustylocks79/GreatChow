@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
+import edu.psu.bjx2020.greatchow.db.Initializer;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
-        firestoreGC.getAllRecipes(Recipe.VEGETARIAN, task -> {
+        firestoreGC.getAllRecipes(Recipe.NEITHER, task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Recipe recipe = document.toObject(Recipe.class);
@@ -100,21 +101,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        firestoreGC.addRecipes(
-//                new Recipe("Scrambled Eggs", currentUser.getUid(), true, false),
-//                new Recipe("Macaroni and Cheese", currentUser.getUid(), true, false));
-//
-//        //show all vegetarian recipes;
-//        firestoreGC.getAllRecipes(true, false, task -> {
-//            if (task.isSuccessful()) {
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//                    Recipe recipe = document.toObject(Recipe.class);
-//                    Log.d(TAG, document.getId() + " => " + recipe.toString());
-//                }
-//            } else {
-//                Log.e(TAG, "Error getting documents: ", task.getException());
-//            }
-//        });
+        //Uncomment and run app to populate database
+//        Initializer.addRecipes();
+
 //
 //        //update a recipe
 //        firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
