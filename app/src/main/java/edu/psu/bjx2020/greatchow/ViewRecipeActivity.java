@@ -1,6 +1,7 @@
 package edu.psu.bjx2020.greatchow;
 
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getExtras().getSerializable("recipe");
+
+        if(recipe.getPathToImage() != null) {
+            ImageView recipeIV = findViewById(R.id.recipe_picture_iv);
+            FirestoreGC firestoreGC = FirestoreGC.getInstance();
+            firestoreGC.setImageFromStorage(recipeIV, ViewRecipeActivity.this, recipe.getPathToImage());
+        }
 
         TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
         recipeNameTV.setText(recipe.getName());
