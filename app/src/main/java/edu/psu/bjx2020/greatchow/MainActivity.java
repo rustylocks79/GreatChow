@@ -9,13 +9,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
-import edu.psu.bjx2020.greatchow.db.Initializer;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 public class MainActivity extends AppCompatActivity {
@@ -143,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.action_schedule: {
                 startActivity(new Intent(this,meal_schedule.class));
+                Log.d(TAG, "meal_schedule: ");
                 return true;
             }
             default:
