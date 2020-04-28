@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Serializable {
+    public static final int NEITHER = 0;
+    public static final int VEGETARIAN = 1;
+    public static final int VEGAN = 2;
+
     private String name;
     private String ownerID;
     private String pathToImage;
     private String nutritionalInfo;
-    private boolean vegetarian;
-    private boolean vegan;
+    private int diet;
     private List<String> ingredients = new ArrayList<>();
     private List<String> steps = new ArrayList<>();
 
@@ -18,11 +21,14 @@ public class Recipe implements Serializable {
 
     }
 
-    public Recipe(String name, String ownerID, boolean vegetarian, boolean vegan) {
+    public Recipe(String name, String ownerID, String pathToImage, String nutritionalInfo, int diet, List<String> ingredients, List<String> steps) {
         this.name = name;
         this.ownerID = ownerID;
-        this.vegetarian = vegetarian;
-        this.vegan = vegan;
+        this.pathToImage = pathToImage;
+        this.nutritionalInfo = nutritionalInfo;
+        this.diet = diet;
+        this.ingredients = ingredients;
+        this.steps = steps;
     }
 
     public String getName() {
@@ -57,20 +63,12 @@ public class Recipe implements Serializable {
         this.nutritionalInfo = nutritionalInfo;
     }
 
-    public boolean isVegetarian() {
-        return vegetarian;
+    public int getDiet() {
+        return diet;
     }
 
-    public void setVegetarian(boolean vegetarian) {
-        this.vegetarian = vegetarian;
-    }
-
-    public boolean isVegan() {
-        return vegan;
-    }
-
-    public void setVegan(boolean vegan) {
-        this.vegan = vegan;
+    public void setDiet(int diet) {
+        this.diet = diet;
     }
 
     public List<String> getIngredients() {
@@ -94,8 +92,9 @@ public class Recipe implements Serializable {
         return "Recipe{" +
                 "name='" + name + '\'' +
                 ", ownerID='" + ownerID + '\'' +
-                ", vegetarian=" + vegetarian +
-                ", vegan=" + vegan +
+                ", pathToImage='" + pathToImage + '\'' +
+                ", nutritionalInfo='" + nutritionalInfo + '\'' +
+                ", diet=" + diet +
                 ", ingredients=" + ingredients +
                 ", steps=" + steps +
                 '}';

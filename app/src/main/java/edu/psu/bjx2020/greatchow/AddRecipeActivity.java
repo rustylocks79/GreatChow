@@ -90,8 +90,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             recipe.setOwnerID(firebaseGC.getOwnerID());
             recipe.setPathToImage(pathToImage);
             recipe.setNutritionalInfo(nutritionalInfo);
-            recipe.setVegetarian(vegetarian);
-            recipe.setVegan(vegan);
+            recipe.setDiet(Recipe.VEGETARIAN);
             recipe.setIngredients(ingredientList);
             recipe.setSteps(stepsList);
             firebaseGC.addRecipe(recipe);
