@@ -47,7 +47,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         TextView nutrInfoTV = findViewById(R.id.nutrition_info_tv);
         nutrInfoTV.setText(recipe.getName());
 
-        //TODO: in xml add TVs to show vegan/vegetarian
         TextView dietValueTV = findViewById(R.id.diet_category_value_tv);
         switch (recipe.getDiet()) {
             case 1:
