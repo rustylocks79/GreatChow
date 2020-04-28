@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
-public class SelectRecipeActivity extends AppCompatActivity {
+public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDialog.ConfirmDialogListener {
     private static final String TAG = "SelectRecipeActivity";
 
     @Override
@@ -39,7 +40,14 @@ public class SelectRecipeActivity extends AppCompatActivity {
 
         postAuth();
 
+
     }
+
+    public void confirmAdd(View view){
+        DialogFragment dialogFragment = new ConfirmDialog();
+        dialogFragment.show(getSupportFragmentManager(),"addDialog");
+    }
+
 
     public void postAuth() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
@@ -54,7 +62,7 @@ public class SelectRecipeActivity extends AppCompatActivity {
                     button.setText(recipe.getName());
                     button.setOnClickListener(v -> {
                         // show add confirm box if need
-                        ///AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        showConfirmDialog();
 
 
                         // add the recipe to calendar
@@ -66,10 +74,21 @@ public class SelectRecipeActivity extends AppCompatActivity {
                 Log.e(TAG, "Error getting documents: ", task.getException());
             }
         });
+
     }
 
-    public void confirmErase(View view) {
-        //DialogFragment dialogFragment = new
+    private void showConfirmDialog() {
+        ConfirmDialog dialog = new ConfirmDialog();
+        dialog.show(getSupportFragmentManager(), "confirmDialog");
     }
+
+    @Override
+    public void onPositiveClick() {
+        //add the recipe to db
+
+    }
+
+
 
 }
+
