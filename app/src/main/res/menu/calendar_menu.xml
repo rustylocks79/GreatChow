@@ -8,9 +8,9 @@
           android:orderInCategory="100"
           app:showAsAction="never"
     />
-    <item android:id="@+id/action_add_recipe_event"
-          android:title="@string/preference_add_recipe"
-          android:icon="@drawable/ic_pen_edit"
+    <item android:id="@+id/action_schedule_meal_todate"
+          android:title="@string/Schedule_meal"
+          android:icon="@drawable/ic_add_edit_foreground"
           android:orderInCategory="100"
           app:showAsAction="ifRoom"
     />

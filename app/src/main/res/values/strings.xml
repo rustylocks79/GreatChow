@@ -37,4 +37,8 @@
     <string name="vegetarian">Vegetarian?</string>
     <string name="vegan">Vegan?</string>
     <string name="recipe_name">Recipe Name</string>
+    <string name="meal_schedule">Meal Schedule</string>
+    <string name="plan_schedule">Meal Schedule</string>
+    <string name="Schedule_meal">Schedule Meal</string>
+    <string name="title_activity_select_recipe">SelectRecipeActivity</string>
 </resources>

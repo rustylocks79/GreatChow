@@ -14,5 +14,10 @@
           android:orderInCategory="100"
           app:showAsAction="ifRoom"
     />
-
+    <item android:id="@+id/action_schedule"
+          android:title="@string/meal_schedule"
+          android:icon="@drawable/ic_calendar_foreground"
+          android:orderInCategory="100"
+          app:showAsAction="ifRoom"
+    />
 </menu>

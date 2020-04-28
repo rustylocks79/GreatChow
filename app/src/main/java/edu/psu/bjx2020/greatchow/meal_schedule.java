@@ -46,8 +46,8 @@ public class meal_schedule extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             }
-            case R.id.action_add_recipe: {
-                startActivity(new Intent(this,AddRecipeActivity.class));
+            case R.id.action_schedule_meal_todate: {
+                startActivity(new Intent(this,SelectRecipeActivity.class));
                 return true;
             }
             default:

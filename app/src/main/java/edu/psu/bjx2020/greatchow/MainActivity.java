@@ -32,17 +32,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        // calendar
-//        calendar = (Button) findViewById(R.id.calendar);
-//        Intent incoming = getIntent();
-//        String date = incoming.getStringExtra("date");
-//
-//        calendar.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, meal_schedule.class);
-//            startActivity(intent);
-//        });
-
-
         //firestore
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         if (!firestoreGC.isAuthenticated()) {
@@ -161,6 +150,10 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.action_add_recipe: {
                 startActivity(new Intent(this,AddRecipeActivity.class));
+                return true;
+            }
+            case R.id.action_schedule: {
+                startActivity(new Intent(this,meal_schedule.class));
                 return true;
             }
             default:

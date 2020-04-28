@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="edu.psu.bjx2020.greatchow">
 
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+            android:name="android.hardware.camera"
+            android:required="true"/>
 
     <application
             android:allowBackup="true"
@@ -12,6 +14,11 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+                android:name=".SelectRecipeActivity"
+                android:label="@string/title_activity_select_recipe"
+                android:theme="@style/NoActionBar">
+        </activity>
+        <activity
                 android:name=".AddRecipeActivity"
                 android:label="@string/title_activity_add_recipe"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -19,6 +26,11 @@
         <activity
                 android:name=".ViewRecipeActivity"
                 android:label="@string/title_activity_view_recipe"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".meal_schedule"
+                android:label="@string/meal_schedule"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".MainActivity">
@@ -30,7 +42,7 @@
         </activity>
         <activity
                 android:name=".SettingsActivity"
-                android:screenOrientation="fullSensor" />
+                android:screenOrientation="fullSensor"/>
     </application>
 
 </manifest>
