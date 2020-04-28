@@ -1,5 +1,6 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,20 +40,22 @@ public class ViewRecipeActivity extends AppCompatActivity {
         LinearLayout llProcessContainer = findViewById(R.id.ll_process_container);
         for(int i=0; i<recipe.getSteps().size(); i++) {
             TextView tv = new TextView(ViewRecipeActivity.this);
-            tv.setText((i+1) + ")" + recipe.getSteps().get(i));
+            tv.setText((i+1) + ") " + recipe.getSteps().get(i));
             tv.setTextSize(18);
             llProcessContainer.addView(tv);
         }
 
         TextView nutrInfoTV = findViewById(R.id.nutrition_info_tv);
-        nutrInfoTV.setText(recipe.getName());
+        nutrInfoTV.setText(recipe.getNutritionalInfo());
 
         TextView dietValueTV = findViewById(R.id.diet_category_value_tv);
         switch (recipe.getDiet()) {
             case 1:
                 dietValueTV.setText("Vegetarian");
+                break;
             case 2:
                 dietValueTV.setText("Vegan");
+                break;
             default:
                 dietValueTV.setText("None");
         }
