@@ -93,7 +93,7 @@ public class FirestoreGC {
                 .orderBy("name")
                 .get().addOnCompleteListener(onCompleteListener);
     }
-    
+
     public void getAllMyRecipes(OnCompleteListener<QuerySnapshot> onCompleteListener) {
         db.collection("recipes")
                 .whereEqualTo("ownerID", user.getUid())
@@ -130,7 +130,7 @@ public class FirestoreGC {
 
     public void setImageFromStorage(ImageView iv, Context context, String location) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(location);
-        Glide.with(context /* context */)
+        Glide.with(context)
                 .load(storageReference)
                 .into(iv);
     }

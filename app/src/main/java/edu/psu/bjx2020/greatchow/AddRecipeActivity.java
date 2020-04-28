@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +17,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
+import io.opencensus.tags.Tag;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddRecipeActivity extends AppCompatActivity {
+    private static final String TAG = "AddRecipeActivity";
+
     private static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final int REQUEST_IMAGE_STORAGE = 1;
     private ImageView ivRecipe;
@@ -161,22 +167,25 @@ public class AddRecipeActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
-                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                    ivRecipe.setImageBitmap(selectedImage);
+                    try {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        ivRecipe.setImageBitmap(selectedImage);
+                    } catch (Exception e) {
+                        Log.e(TAG, "could not add photo (Camera)", e);
+                    }
                     break;
                 case REQUEST_IMAGE_STORAGE:
-                    Uri selectedImageUri = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    if (selectedImageUri != null) {
-                        Cursor cursor = getContentResolver().query(selectedImageUri,
-                                filePathColumn, null, null, null);
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                            String picturePath = cursor.getString(columnIndex);
-                            ivRecipe.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                            cursor.close();
+                    try {
+                        final Uri imageUri = data.getData();
+                        if(imageUri != null) {
+                            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                            ivRecipe.setImageBitmap(selectedImage);
+                        } else {
+                            Log.e(TAG, "null image uri");
                         }
+                    } catch (FileNotFoundException e) {
+                        Log.e(TAG, "could not add photo (Gallary)", e);
                     }
                     break;
             }
