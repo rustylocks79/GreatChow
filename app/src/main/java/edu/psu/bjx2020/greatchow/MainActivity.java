@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
-        firestoreGC.getAllRecipes(false, false, task -> {
+        firestoreGC.getAllRecipes(Recipe.VEGETARIAN, task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Recipe recipe = document.toObject(Recipe.class);
