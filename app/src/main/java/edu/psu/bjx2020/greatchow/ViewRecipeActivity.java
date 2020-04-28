@@ -1,5 +1,7 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -7,11 +9,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FileDownloadTask;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
+
+import java.io.File;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
@@ -30,10 +36,13 @@ public class ViewRecipeActivity extends AppCompatActivity {
         if(recipe.getPathToImage() != null) {
             ImageView recipeIV = findViewById(R.id.recipe_picture_iv);
             FirestoreGC firestoreGC = FirestoreGC.getInstance();
-            firestoreGC.setImageFromStorage(recipeIV, ViewRecipeActivity.this, recipe.getPathToImage());
+            firestoreGC.getImageFromStorage(recipe.getPathToImage(), file -> {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+                recipeIV.setImageBitmap(bitmap);
+            });
         }
 
-        TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
+            TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
         recipeNameTV.setText(recipe.getName());
 
         LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);

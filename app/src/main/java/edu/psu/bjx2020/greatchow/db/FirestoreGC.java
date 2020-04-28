@@ -2,24 +2,33 @@ package edu.psu.bjx2020.greatchow.db;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 public class FirestoreGC {
+    public interface OnDownloadImage {
+         void onCompete(File file);
+    }
+
     private static final String TAG = "FirestoreGC";
 
     private static FirestoreGC INSTANCE;
@@ -125,14 +134,21 @@ public class FirestoreGC {
         uploadTask
                 .addOnFailureListener(exception -> Log.e(TAG, "Could not upload photo. ", exception))
                 .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "uploaded photo"));
-        return path;
+        return storageRef.getPath();
     }
 
-    public void setImageFromStorage(ImageView iv, Context context, String location) {
+    public void getImageFromStorage(String location, OnDownloadImage onDownloadImage) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(location);
-        Glide.with(context)
-                .load(storageReference)
-                .into(iv);
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("location", "jpg");
+        } catch (IOException e) {
+            Log.e(TAG, "could not create temp file ", e);
+        }
+        File finalLocalFile = localFile;
+        storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> onDownloadImage.onCompete(finalLocalFile))
+            .addOnFailureListener(exception -> Log.e(TAG, "failed to download image", exception));
+
     }
 
     public String getOwnerID() {

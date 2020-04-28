@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
-import edu.psu.bjx2020.greatchow.db.Initializer;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 public class MainActivity extends AppCompatActivity {

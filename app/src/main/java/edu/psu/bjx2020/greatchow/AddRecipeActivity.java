@@ -17,7 +17,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
-import io.opencensus.tags.Tag;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
