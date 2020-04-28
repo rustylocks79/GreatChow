@@ -6,16 +6,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.CalendarView;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
 public class meal_schedule extends AppCompatActivity {
 
-    CalendarView mCalendar = findViewById(R.id.calendarView);
-    TextView mdate = findViewById(R.id.calendarTextView);
+    //CalendarView mCalendar = findViewById(R.id.calendarView);
+    //TextView mdate = findViewById(R.id.calendarTextView);
     //List<CalendarContract.EventDays> recipe_events = new ArrayList<CalendarContract.EventDays>();
 
 
@@ -30,17 +28,17 @@ public class meal_schedule extends AppCompatActivity {
         Toolbar mcalToolbar = findViewById(R.id.calendarToolbar);
         setSupportActionBar(mcalToolbar);
 
-        mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+       // mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
-            @Override
+           /* @Override
             public void onSelectedDayChange(CalendarView view, int year, int month,
                                             int dayOfMonth) {
                 // TODO Auto-generated method stub
 
-                mdate.setText("Date is : " + dayOfMonth +" / " + (month+1) + " / " + year);
+                //mdate.setText("Date is : " + dayOfMonth +" / " + (month+1) + " / " + year);
 
             }
-        });
+        });*/
 
     }
 
