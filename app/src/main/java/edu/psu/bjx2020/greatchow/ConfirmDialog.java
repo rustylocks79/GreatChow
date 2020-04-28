@@ -36,7 +36,7 @@ public class ConfirmDialog extends DialogFragment {
 
     public void handleOK()
     {
-        Toast.makeText(getActivity(), "OK was clicked.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "The recipe is added to date.", Toast.LENGTH_LONG).show();
     }
 
     @Override
