@@ -41,4 +41,5 @@
     <string name="plan_schedule">Meal Schedule</string>
     <string name="Schedule_meal">Schedule Meal</string>
     <string name="title_activity_select_recipe">SelectRecipeActivity</string>
+    <string name="diet_notes">Diet Notes:</string>
 </resources>

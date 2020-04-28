@@ -38,16 +38,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv" />
 
-    <TextView
-        android:text="@string/ingredients"
+    <LinearLayout
+        android:id="@+id/diet_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredients_title_tv"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv">
+
+        <TextView
+            android:id="@+id/diet_category_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/diet_notes"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/diet_category_value_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text=""
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ingredients_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textSize="30sp" />
+        android:layout_marginTop="16dp"
+        android:text="@string/ingredients"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/diet_ll" />
 
     <LinearLayout
         android:id="@+id/ll_ingredients_container"

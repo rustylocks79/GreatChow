@@ -54,7 +54,6 @@ public class AddRecipeActivity extends AppCompatActivity {
                 ingredientList.add(etIngredient.getText().toString());
                 ingredientnum++;
             }
-
             if (ingredientList.isEmpty()) {
                 Snackbar.make(view, "ingredients must contain at least one item. ", Snackbar.LENGTH_SHORT).show();
             }
@@ -67,7 +66,6 @@ public class AddRecipeActivity extends AppCompatActivity {
                 stepsList.add(etSteps.getText().toString());
                 stepnum++;
             }
-
             if (stepsList.isEmpty()) {
                 Snackbar.make(view, "steps must contain at least one item.", Snackbar.LENGTH_SHORT).show();
             }
@@ -75,11 +73,8 @@ public class AddRecipeActivity extends AppCompatActivity {
             EditText etNutrition = findViewById(R.id.enter_nutrition_et);
             String nutritionalInfo = etNutrition.getText().toString();
 
-            CheckBox vegetarianCB = findViewById(R.id.vegetarian_cb);
-            boolean vegetarian = vegetarianCB.isChecked();
-
-            CheckBox veganCB = findViewById(R.id.vegan_cb);
-            boolean vegan = veganCB.isChecked();
+            Spinner dietSpinner = findViewById(R.id.diet_category_spinner);
+            int diet = dietSpinner.getSelectedItemPosition();
 
             ImageView imageView = findViewById(R.id.recipe_picture_iv);
 
@@ -90,9 +85,9 @@ public class AddRecipeActivity extends AppCompatActivity {
             recipe.setOwnerID(firebaseGC.getOwnerID());
             recipe.setPathToImage(pathToImage);
             recipe.setNutritionalInfo(nutritionalInfo);
-            recipe.setDiet(Recipe.VEGETARIAN);
             recipe.setIngredients(ingredientList);
             recipe.setSteps(stepsList);
+            recipe.setDiet(diet);
             firebaseGC.addRecipe(recipe);
 
             Intent intent = new Intent(AddRecipeActivity.this, MainActivity.class);

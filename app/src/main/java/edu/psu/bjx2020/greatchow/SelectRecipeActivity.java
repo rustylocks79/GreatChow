@@ -37,10 +37,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
                         .setAction("Action", null).show();
             }
         });
-
         postAuth();
-
-
     }
 
     public void confirmAdd(View view){
@@ -74,7 +71,6 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
                 Log.e(TAG, "Error getting documents: ", task.getException());
             }
         });
-
     }
 
     private void showConfirmDialog() {
@@ -85,10 +81,6 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     @Override
     public void onPositiveClick() {
         //add the recipe to db
-
     }
-
-
-
 }
 

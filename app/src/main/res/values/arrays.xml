@@ -23,4 +23,10 @@
         <item>"Alp"</item>
         <item>"Time"</item>
     </string-array>
+
+    <string-array name="dietcategories">
+        <item>"None"</item>
+        <item>"Vegetarian"</item>
+        <item>"Vegan"</item>
+    </string-array>
 </resources>

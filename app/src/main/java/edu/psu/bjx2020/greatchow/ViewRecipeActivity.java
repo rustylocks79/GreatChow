@@ -48,6 +48,15 @@ public class ViewRecipeActivity extends AppCompatActivity {
         nutrInfoTV.setText(recipe.getName());
 
         //TODO: in xml add TVs to show vegan/vegetarian
+        TextView dietValueTV = findViewById(R.id.diet_category_value_tv);
+        switch (recipe.getDiet()) {
+            case 1:
+                dietValueTV.setText("Vegetarian");
+            case 2:
+                dietValueTV.setText("Vegan");
+            default:
+                dietValueTV.setText("None");
+        }
 
         FloatingActionButton fab = findViewById(R.id.view_fab);
         fab.setOnClickListener(view -> {

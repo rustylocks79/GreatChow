@@ -50,6 +50,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_picture_iv" />
 
+    <LinearLayout
+        android:id="@+id/diet_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_title_et">
+
+        <TextView
+            android:id="@+id/diet_category_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/diet_notes"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/diet_category_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/dietcategories"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/ingredients_title_tv"
         android:layout_width="wrap_content"
@@ -59,7 +88,7 @@
         android:text="@string/ingredients"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter_title_et" />
+        app:layout_constraintTop_toBottomOf="@+id/diet_ll" />
 
     <LinearLayout
         android:id="@+id/ingredients_linearlayout"
@@ -173,28 +202,6 @@
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="@+id/nutrition_title_tv"
         app:layout_constraintTop_toBottomOf="@+id/nutrition_title_tv" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter_nutrition_et">
-
-        <CheckBox
-            android:id="@+id/vegetarian_cb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vegetarian" />
-
-        <CheckBox
-            android:id="@+id/vegan_cb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vegan" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
