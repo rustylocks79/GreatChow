@@ -72,9 +72,9 @@ public class FirestoreGC {
                 .addOnFailureListener((@NonNull Exception e) -> Log.e(TAG, "failed to add recipe to database ", e));
     }
 
-    public void getRecipeByID(String id, OnSuccessListener<DocumentSnapshot> onSuccessListener) {
-        db.collection("recipe").document(id).get()
-                .addOnSuccessListener(onSuccessListener);
+    public void getRecipeByID(String id, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+        db.collection("recipes").document(id).get()
+                .addOnCompleteListener(onCompleteListener);
     }
 
     /**

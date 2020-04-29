@@ -16,36 +16,45 @@ import java.security.acl.Owner;
 import java.text.SimpleDateFormat;
 
 public class ConfirmDialog extends DialogFragment {
+    String mRecipeId;
     Recipe mRecipe;
-    TextView mdate ;
+    TextView mdate;
     String selectedDate;
     SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
     CalendarView mCalendar ;
     Owner owner;
 
-    ScheduledRecipe sr;
+    int dayOfMonth, month, year;
 
     private ConfirmDialogListener listener;
     public ConfirmDialog() {}
-    public ConfirmDialog(ScheduledRecipe sr, Recipe recipe) {
-        this.sr = sr;
+    public ConfirmDialog(String id, Recipe recipe, int dayOfMonth, int month, int year) {
+        this.mRecipeId = id;
         this.mRecipe = recipe;
+        this.dayOfMonth = dayOfMonth;
+        this.month = month;
+        this.year = year;
     }
 
 
     public interface ConfirmDialogListener{
-        public void onPositiveClick(DialogFragment confirmDialog);
-
+        void onPositiveClick(DialogFragment confirmDialog, String id);
         void onNegativeClick(DialogFragment confirmDialog);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String mdate = String.valueOf(sr.getDayOfMonth() + sr.getMonth() + sr.getYear());
+        String mdate = dayOfMonth + "/" + month + "/" + year;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add recipe?")
                 .setMessage("Add "+ mRecipe.getName()
                         + " to your " + mdate + "?")
+                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onPositiveClick(ConfirmDialog.this, mRecipeId);
+                    }
+                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onNegativeClick(ConfirmDialog.this);
@@ -58,6 +67,7 @@ public class ConfirmDialog extends DialogFragment {
     {
         Toast.makeText(getActivity(), "The recipe is added to date.", Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     public void onAttach(Context context){

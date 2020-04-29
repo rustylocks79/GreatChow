@@ -56,7 +56,6 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
 
     public void postAuth() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         LinearLayout selectRecipeList = findViewById(R.id.search_recipe_list_ll);
         firestoreGC.getAllRecipes(Recipe.VEGETARIAN, task -> {
@@ -70,17 +69,11 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
                         // todo set values of sr
                         //sdf = (SimpleDateFormat) getIntent().getExtras().getSerializable("date");
                         //sr.setDayOfMonth();
-                        day = (int) getIntent().getExtras().getSerializable("day");
-                        month = (int) getIntent().getExtras().getSerializable("month");
-                        year = (int) getIntent().getExtras().getSerializable("year");
-                        sr = new ScheduledRecipe();
-                        sr.setDayOfMonth(day);
-                        sr.setMonth(month);
-                        sr.setYear(year);
-                        sr.setId(document.getId());
-                        sr.setOwnerID(firestoreGC.getOwnerID()); //todo format: string invert to int
+                        day = getIntent().getExtras().getInt("day");
+                        month = getIntent().getExtras().getInt("month");
+                        year = getIntent().getExtras().getInt("year");
 
-                        showConfirmDialog(sr);
+                        showConfirmDialog(document.getId(), day, month, year);
                         // add the recipe to calendar
                     });
                     selectRecipeList.addView(button);
@@ -92,25 +85,36 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         });
     }
 
-    private void showConfirmDialog(ScheduledRecipe sr) {
+    private void showConfirmDialog(String id, int day, int month, int year) {
         //TODO pass parameters
 
-        ScheduledRecipe scheduledRecipe = sr;
-        FirestoreGC.getInstance().getRecipeByID(sr.getId(),task -> {
-            Recipe recipe = task.toObject(Recipe.class);
-            ConfirmDialog dialog = new ConfirmDialog(sr, recipe);
-            dialog.show(getSupportFragmentManager(), "confirmDialog");
+        FirestoreGC.getInstance().getRecipeByID(id, task -> {
+            if(task.isSuccessful()) {
+                Recipe recipe = task.getResult().toObject(Recipe.class);
+                ConfirmDialog dialog = new ConfirmDialog(id, recipe, day, month, year);
+                dialog.show(getSupportFragmentManager(), "confirmDialog");
+            } else {
+                Log.e(TAG, "Error getting documents: ", task.getException());
+            }
         });
     }
 
     @Override
-    public void onPositiveClick(DialogFragment dialog) {
+    public void onPositiveClick(DialogFragment dialog, String id) {
         // TODO add the recipe to db
-        CalendarView mCalendar = findViewById(R.id.calendarView);
-        TextView mdate = findViewById(R.id.calendarTextView);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
-        String selectedDate = sdf.format(new Date(mCalendar.getDate()));
+//        CalendarView mCalendar = findViewById(R.id.calendarView);
+//        TextView mdate = findViewById(R.id.calendarTextView);
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
+//        String selectedDate = sdf.format(new Date(mCalendar.getDate()));
 
+        FirestoreGC firestoreGC = FirestoreGC.getInstance();
+        ScheduledRecipe sr = new ScheduledRecipe();
+        sr.setDayOfMonth(day);
+        sr.setMonth(month);
+        sr.setYear(year);
+        sr.setId(id);
+        sr.setOwnerID(firestoreGC.getOwnerID());
+        firestoreGC.addScheduledRecipe(sr);
     }
 
     @Override
