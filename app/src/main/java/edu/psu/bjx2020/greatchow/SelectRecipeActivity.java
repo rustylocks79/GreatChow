@@ -1,8 +1,8 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,22 +10,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 import edu.psu.bjx2020.greatchow.db.ScheduledRecipe;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDialog.ConfirmDialogListener {
     private static final String TAG = "SelectRecipeActivity";
-    SimpleDateFormat sdf;
-    ScheduledRecipe sr;
-    int day, month, year;
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+
+    private int year, month, dayOfMonth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_recipe);
+        Bundle extras = getIntent().getExtras();
+        year = extras.getInt("year");
+        month = extras.getInt("month");
+        dayOfMonth = extras.getInt("dayOfMonth");
+        Log.d(TAG, "Creating Select Recipe Activity with date=" + month + "/" + dayOfMonth + "/" + year);
 
         //toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -33,75 +40,51 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
 
         //finish floating button
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener(view -> {
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         });
         postAuth();
     }
 
-    public void confirmAdd(View view){
-        DialogFragment dialogFragment = new ConfirmDialog();
-        dialogFragment.show(getSupportFragmentManager(),"addDialog");
-    }
-
-
     public void postAuth() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
-
         LinearLayout selectRecipeList = findViewById(R.id.search_recipe_list_ll);
-        firestoreGC.getAllRecipes(Recipe.VEGETARIAN, task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Recipe recipe = document.toObject(Recipe.class);
-                    Button button = new Button(SelectRecipeActivity.this);
-                    button.setText(recipe.getName());
-                    button.setOnClickListener(v -> {
-                        //  set values of sr
-                        day = getIntent().getExtras().getInt("day");
-                        month = getIntent().getExtras().getInt("month");
-                        year = getIntent().getExtras().getInt("year");
-
-                        showConfirmDialog(document.getId(), day, month, year);
-                        // add the recipe to calendar
-                    });
-                    selectRecipeList.addView(button);
-                    Log.d(TAG, document.getId() + " => " + recipe.toString());
-                }
-            } else {
-                Log.e(TAG, "Error getting documents: ", task.getException());
+        firestoreGC.getAllRecipes(Recipe.VEGETARIAN, queryDocumentSnapshots -> {
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                Recipe recipe = document.toObject(Recipe.class);
+                Button button = new Button(SelectRecipeActivity.this);
+                button.setText(recipe.getName());
+                button.setOnClickListener(v -> {
+                    showConfirmDialog(document.getId());
+                });
+                selectRecipeList.addView(button);
+                Log.d(TAG, document.getId() + " => " + recipe.toString());
             }
         });
     }
 
-    private void showConfirmDialog(String id, int day, int month, int year) {
-        //TODO pass parameters
-
-        FirestoreGC.getInstance().getRecipeByID(id, task -> {
-            if(task.isSuccessful()) {
-                Recipe recipe = task.getResult().toObject(Recipe.class);
-                ConfirmDialog dialog = new ConfirmDialog(id, recipe, day, month, year);
-                dialog.show(getSupportFragmentManager(), "confirmDialog");
-            } else {
-                Log.e(TAG, "Error getting documents: ", task.getException());
-            }
+    private void showConfirmDialog(String id) {
+        FirestoreGC.getInstance().getRecipeByID(id, documentSnapshot -> {
+            Recipe recipe = documentSnapshot.toObject(Recipe.class);
+            ConfirmDialog dialog = new ConfirmDialog(id, recipe, year, month, dayOfMonth);
+            dialog.show(getSupportFragmentManager(), "confirmDialog");
         });
     }
 
     @Override
-    public void onPositiveClick(DialogFragment dialog, String id) {
-        // TODO add the recipe to db
+    public void onPositiveClick(DialogFragment dialog, String id, int year, int month, int dayOfWeek) {
+        Log.d(TAG, "User accepted scheduling id=" + id + " on date=" + month + "/" + dayOfWeek + "/" + year);
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         ScheduledRecipe sr = new ScheduledRecipe();
-        sr.setDayOfMonth(day);
-        sr.setMonth(month);
-        sr.setYear(year);
         sr.setId(id);
+        sr.setYear(year);
+        sr.setMonth(month);
+        sr.setDayOfMonth(dayOfWeek);
         sr.setOwnerID(firestoreGC.getOwnerID());
         firestoreGC.addScheduledRecipe(sr);
+        Intent intent = new Intent(SelectRecipeActivity.this, MealScheduleActivity.class);
+        startActivity(intent);
     }
 
     @Override

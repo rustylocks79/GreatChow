@@ -29,7 +29,7 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".meal_schedule"
+                android:name=".MealScheduleActivity"
                 android:label="@string/meal_schedule"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>

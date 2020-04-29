@@ -2,9 +2,9 @@ package edu.psu.bjx2020.greatchow.db;
 
 public class ScheduledRecipe {
 
-    private int dayOfMonth;
-    private int month;
     private int year;
+    private int month;
+    private int dayOfMonth;
     private String ownerID;
     private String id;
 
@@ -12,20 +12,20 @@ public class ScheduledRecipe {
 
     }
 
-    public ScheduledRecipe(int dayOfMonth, int month, int year, String ownerID, String id) {
-        this.dayOfMonth = dayOfMonth;
-        this.month = month;
+    public ScheduledRecipe(int year, int month, int dayOfMonth, String ownerID, String id) {
         this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
         this.ownerID = ownerID;
         this.id = id;
     }
 
-    public int getDayOfMonth() {
-        return dayOfMonth;
+    public int getYear() {
+        return year;
     }
 
-    public void setDayOfMonth(int dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public int getMonth() {
@@ -36,12 +36,12 @@ public class ScheduledRecipe {
         this.month = month;
     }
 
-    public int getYear() {
-        return year;
+    public int getDayOfMonth() {
+        return dayOfMonth;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
     }
 
     public String getOwnerID() {
@@ -63,10 +63,10 @@ public class ScheduledRecipe {
     @Override
     public String toString() {
         return "ScheduledRecipe{" +
-                "dayOfMonth=" + dayOfMonth +
+                "year=" + year +
                 ", month=" + month +
-                ", year=" + year +
-                ", ownerID=" + ownerID +
+                ", dayOfWeek=" + dayOfMonth +
+                ", ownerID='" + ownerID + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

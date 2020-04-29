@@ -3,14 +3,10 @@ package edu.psu.bjx2020.greatchow.db;
 import android.graphics.Bitmap;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.*;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -72,9 +68,9 @@ public class FirestoreGC {
                 .addOnFailureListener((@NonNull Exception e) -> Log.e(TAG, "failed to add recipe to database ", e));
     }
 
-    public void getRecipeByID(String id, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+    public void getRecipeByID(String id, OnSuccessListener<DocumentSnapshot> onSuccessListener) {
         db.collection("recipes").document(id).get()
-                .addOnCompleteListener(onCompleteListener);
+                .addOnSuccessListener(onSuccessListener);
     }
 
     /**
@@ -83,57 +79,66 @@ public class FirestoreGC {
      */
     public void addScheduledRecipe(ScheduledRecipe recipe) {
         db.collection("schedule").add(recipe)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "add scheduled recipe to database: " + documentReference ))
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "added scheduled recipe to database: " + documentReference ))
                 .addOnFailureListener((@NonNull Exception e) -> Log.e(TAG, "failed to add recipe to database ", e));
     }
 
     /**
      * Gets all the recipe in the database that meet the diet requirement ordered by name.
      * @param diet the minimum diet requirement.
-     * @param onCompleteListener The listener that will be called when the query is complete.
+     * @param onSuccessListener The listener that will be called when the query is complete.
      */
-    public void getAllRecipes(int diet, OnCompleteListener<QuerySnapshot> onCompleteListener) {
+    public void getAllRecipes(int diet, OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("recipes")
                 .whereGreaterThanOrEqualTo("diet", diet)
                 .orderBy("diet")
                 .orderBy("name")
                 .get()
-                .addOnCompleteListener(onCompleteListener);
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(e -> Log.e(TAG, "unable to get recipes from database", e));
     }
 
     /**
      * Get all the recipes that belong to the current user ordered by name.
-     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     * @param onSuccessListener the listener that will be called once the database has returned the requested information.
      */
-    public void getAllMyRecipes(OnCompleteListener<QuerySnapshot> onCompleteListener) {
+    public void getAllMyRecipes(OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("recipes")
                 .whereEqualTo("ownerID", user.getUid())
                 .orderBy("name")
                 .get()
-                .addOnCompleteListener(onCompleteListener);
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(e -> Log.e(TAG, "failed to get recipes. ", e));
     }
 
     /**
      * Get all the recipes with the specified name and minimum level diet.
      * @param name the name that the returned recipes will have.
      * @param diet the minimum diet level.
-     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     * @param onSuccessListener the listener that will be called once the database has returned the requested information.
      */
-    public void getRecipes(String name, int diet, OnCompleteListener<QuerySnapshot> onCompleteListener) {
+    public void getRecipes(String name, int diet, OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("recipes")
                 .whereEqualTo("name", name)
                 .whereGreaterThanOrEqualTo("diet", diet)
-                .get().addOnCompleteListener(onCompleteListener);
+                .get()
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(e -> Log.e(TAG, "failed to get recipes. ", e));
     }
 
     /**
      * Returns all the scheduled recipes for the current user.
-     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     * @param onSuccessListener the listener that will be called once the database has returned the requested information.
      */
-    public void getScheduledRecipes(OnCompleteListener<QuerySnapshot> onCompleteListener) {
+    public void getScheduledRecipes(OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("schedule")
                 .whereEqualTo("ownerID", user.getUid())
-                .get().addOnCompleteListener(onCompleteListener);
+                .orderBy("year", Query.Direction.ASCENDING)
+                .orderBy("month", Query.Direction.ASCENDING)
+                .orderBy("dayOfMonth", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(e -> Log.e(TAG, "failed to get scheduled recipes", e));
     }
 
     public String uploadRecipeImage(Bitmap bitmap, String ownerID) {
@@ -146,8 +151,8 @@ public class FirestoreGC {
         StorageReference storageRef = storage.getReference().child("images/" + ownerID + "/" + UUID.randomUUID() + ".jpg");
         UploadTask uploadTask = storageRef.putBytes(data);
         uploadTask
-                .addOnFailureListener(exception -> Log.e(TAG, "Could not upload photo. ", exception))
-                .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "uploaded photo"));
+                .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "uploaded photo"))
+                .addOnFailureListener(e -> Log.e(TAG, "Could not upload photo. ", e));
         return storageRef.getPath();
     }
 

@@ -13,52 +13,40 @@ import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.security.acl.Owner;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ConfirmDialog extends DialogFragment {
-    String mRecipeId;
-    Recipe mRecipe;
-    TextView mdate;
-    String selectedDate;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
-    CalendarView mCalendar ;
-    Owner owner;
+    private static final String TAG = "ConfirmDialog";
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
-    int dayOfMonth, month, year;
+    private String mRecipeId;
+    private Recipe mRecipe;
+    private int year, month, dayOfWeek;
 
     private ConfirmDialogListener listener;
     public ConfirmDialog() {}
-    public ConfirmDialog(String id, Recipe recipe, int dayOfMonth, int month, int year) {
+    public ConfirmDialog(String id, Recipe recipe, int year, int month, int dayOfWeek) {
         this.mRecipeId = id;
         this.mRecipe = recipe;
-        this.dayOfMonth = dayOfMonth;
-        this.month = month;
         this.year = year;
+        this.month = month;
+        this.dayOfWeek = dayOfWeek;
     }
 
-
     public interface ConfirmDialogListener{
-        void onPositiveClick(DialogFragment confirmDialog, String id);
+        void onPositiveClick(DialogFragment confirmDialog, String recipeID, int year, int month, int dayOfWeek);
         void onNegativeClick(DialogFragment confirmDialog);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String mdate = dayOfMonth + "/" + month + "/" + year;
+        String dateText = month + "/" + dayOfWeek + "/" + year;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add recipe?")
-                .setMessage("Add "+ mRecipe.getName()
-                        + " to your meal plan on " + mdate + "?")
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onPositiveClick(ConfirmDialog.this, mRecipeId);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listener.onNegativeClick(ConfirmDialog.this);
-                    }
-                });
+                .setMessage("Add "+ mRecipe.getName() + " to your meal plan on " + dateText + "?")
+                .setPositiveButton("Accept", (dialog, which) -> listener.onPositiveClick(ConfirmDialog.this, mRecipeId, year, month, dayOfWeek))
+                .setNegativeButton("Cancel", (dialog, id) -> listener.onNegativeClick(ConfirmDialog.this));
         return builder.create();
     }
 

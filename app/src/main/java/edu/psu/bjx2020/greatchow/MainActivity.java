@@ -14,10 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
-import org.w3c.dom.Document;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
@@ -84,21 +82,19 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
         //TODO: make it such that you can get information from shared preferences that manages the filtering.
-        firestoreGC.getAllRecipes(Recipe.NONE, task -> {
-            if(task.isSuccessful()) {
-                for (DocumentSnapshot document : task.getResult()) {
-                    Recipe recipe = document.toObject(Recipe.class);
-                    Button button = new Button(MainActivity.this);
-                    button.setText(recipe.getName());
-                    button.setOnClickListener(v -> {
-                        Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
-                        intent.putExtra("recipe", recipe);
-                        intent.putExtra("id", document.getId());
-                        startActivity(intent);
-                    });
-                    llRecipeList.addView(button);
-                    Log.d(TAG, document.getId() + " => " + recipe.toString());
-                }
+        firestoreGC.getAllRecipes(Recipe.NONE, queryDocumentSnapshots -> {
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                Recipe recipe = document.toObject(Recipe.class);
+                Button button = new Button(MainActivity.this);
+                button.setText(recipe.getName());
+                button.setOnClickListener(v -> {
+                    Intent intent = new Intent(MainActivity.this, ViewRecipeActivity.class);
+                    intent.putExtra("id", document.getId());
+                    intent.putExtra("recipe", recipe);
+                    startActivity(intent);
+                });
+                llRecipeList.addView(button);
+                Log.d(TAG, document.getId() + " => " + recipe.toString());
             }
         });
 
@@ -143,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.action_schedule: {
-                startActivity(new Intent(this,meal_schedule.class));
+                startActivity(new Intent(this, MealScheduleActivity.class));
                 Log.d(TAG, "meal_schedule: ");
                 return true;
             }
