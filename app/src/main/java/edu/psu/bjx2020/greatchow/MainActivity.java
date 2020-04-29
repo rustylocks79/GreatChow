@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
             case R.id.action_menu_sign_out: {
                 FirebaseAuth.getInstance().signOut();
-                finishAndRemoveTask(); //TODO: wrong
+                finishAffinity(); //TODO: wrong
             }
             default:
             return super.onOptionsItemSelected(item);

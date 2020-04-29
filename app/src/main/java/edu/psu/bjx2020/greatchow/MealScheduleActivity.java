@@ -110,6 +110,10 @@ public class MealScheduleActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             }
+            case R.id.action_main: {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            }
             case R.id.action_schedule_meal_todate: {
                 Intent selectActivity = new Intent(this,SelectRecipeActivity.class);
                 selectActivity.putExtra("year", year);
