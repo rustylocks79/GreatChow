@@ -5,14 +5,14 @@ public class ScheduledRecipe {
     private int dayOfMonth;
     private int month;
     private int year;
-    private int ownerID;
+    private String ownerID;
     private String id;
 
     public ScheduledRecipe() {
 
     }
 
-    public ScheduledRecipe(int dayOfMonth, int month, int year, int ownerID, String id) {
+    public ScheduledRecipe(int dayOfMonth, int month, int year, String ownerID, String id) {
         this.dayOfMonth = dayOfMonth;
         this.month = month;
         this.year = year;
@@ -44,11 +44,11 @@ public class ScheduledRecipe {
         this.year = year;
     }
 
-    public int getOwnerID() {
+    public String getOwnerID() {
         return ownerID;
     }
 
-    public void setOwnerID(int ownerID) {
+    public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
     }
 
