@@ -7,17 +7,18 @@ public class ScheduledRecipe {
     private int year;
     private int ownerID;
     private String id;
-
+    private String rname;
     public ScheduledRecipe() {
-
     }
 
-    public ScheduledRecipe(int dayOfMonth, int month, int year, int ownerID, String id) {
+    public ScheduledRecipe(int dayOfMonth, int month, int year, int ownerID, String id, String rname) {
         this.dayOfMonth = dayOfMonth;
         this.month = month;
         this.year = year;
         this.ownerID = ownerID;
-        this.id = id;
+        this.id= id; // id of recipe
+        this.rname =rname;
+
     }
 
     public int getDayOfMonth() {
@@ -52,13 +53,15 @@ public class ScheduledRecipe {
         this.ownerID = ownerID;
     }
 
-    public String getId() {
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
+
+    public String getRname() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setRname(String rname) { this.rname = rname; }
 
     @Override
     public String toString() {
@@ -67,7 +70,8 @@ public class ScheduledRecipe {
                 ", month=" + month +
                 ", year=" + year +
                 ", ownerID=" + ownerID +
-                ", id='" + id + '\'' +
+                ", id='" + id +
+                ", recipe name='" + rname + '\'' +
                 '}';
     }
 }
