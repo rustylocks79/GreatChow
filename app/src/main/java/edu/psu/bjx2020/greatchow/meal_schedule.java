@@ -1,6 +1,7 @@
 package edu.psu.bjx2020.greatchow;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -9,11 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +26,12 @@ public class meal_schedule extends AppCompatActivity {
 
     CalendarView mCalendar;
     public static TextView mdate;
-    SimpleDateFormat sdf ;
+    SimpleDateFormat sdf;
+
+    int day,month, year;
     List<CalendarContract.EventDays> recipe_events = new ArrayList<CalendarContract.EventDays>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,17 +45,24 @@ public class meal_schedule extends AppCompatActivity {
         //get date in calendar
         mCalendar = findViewById(R.id.calendarView);
         mdate = findViewById(R.id.calendarTextView);
-        sdf = new SimpleDateFormat("dd / MM / yyyy");
+        sdf = new SimpleDateFormat("dd/mm/yy") ;
         String selectedDate = sdf.format(new Date(mCalendar.getDate()));
+        List<String> temp =  Arrays.asList(selectedDate.split("/"));
+        day = Integer.parseInt(temp.get(0));
+        month = Integer.parseInt(temp.get(1));
+        year = Integer.parseInt(temp.get(2));
+
+
         mdate.setText("Date is : " + selectedDate );
         mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+            public void onSelectedDayChange(CalendarView view, int tyear, int tmonth, int dayOfMonth) {
                 // TODO Auto-generated method stub
                 Log.d(TAG, "Date selected");
-                //selectedDate[0] = sdf.format(new Date(mCalendar.getDate()));
-                //mdate.setText(selectedDate[0]);
-                mdate.setText("Date is : " + dayOfMonth +" / " + (month+1) + " / " + year);
+                day = dayOfMonth;
+                month =tmonth+1;
+                year = tyear;
+                mdate.setText("Date is : " + dayOfMonth +" / " + month + " / " + year);
             }
         });
     }
@@ -72,9 +85,11 @@ public class meal_schedule extends AppCompatActivity {
                 return true;
             }
             case R.id.action_schedule_meal_todate: {
-                //todo pass ownerid, date to selectRecipeActivity
+                //pass  date to selectRecipeActivity
                 Intent selectActivity = new Intent(this,SelectRecipeActivity.class);
-                selectActivity.putExtra("date", sdf);
+                selectActivity.putExtra("day", day);
+                selectActivity.putExtra("month", month);
+                selectActivity.putExtra("year", year);
                 startActivity(selectActivity);
                 return true;
             }

@@ -27,8 +27,9 @@ public class ConfirmDialog extends DialogFragment {
 
     private ConfirmDialogListener listener;
     public ConfirmDialog() {}
-    public ConfirmDialog(ScheduledRecipe sr) {
+    public ConfirmDialog(ScheduledRecipe sr, Recipe recipe) {
         this.sr = sr;
+        this.mRecipe = recipe;
     }
 
 
@@ -43,14 +44,8 @@ public class ConfirmDialog extends DialogFragment {
         String mdate = String.valueOf(sr.getDayOfMonth() + sr.getMonth() + sr.getYear());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add recipe?")
-                .setMessage("Add "+ mRecipe + " to your " + mdate + "?")
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //add the recipe to calendar
-                        listener.onPositiveClick(ConfirmDialog.this);
-                        handleOK();
-                    }
-                })
+                .setMessage("Add "+ mRecipe.getName()
+                        + " to your " + mdate + "?")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onNegativeClick(ConfirmDialog.this);

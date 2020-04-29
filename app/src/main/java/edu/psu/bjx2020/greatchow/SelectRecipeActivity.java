@@ -19,7 +19,6 @@ import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 import edu.psu.bjx2020.greatchow.db.ScheduledRecipe;
 
-import java.security.acl.Owner;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,6 +26,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     private static final String TAG = "SelectRecipeActivity";
     SimpleDateFormat sdf;
     ScheduledRecipe sr;
+    int day, month, year;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +63,23 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Recipe recipe = document.toObject(Recipe.class);
-                    sr = document.toObject(ScheduledRecipe.class);
+                    //sr = document.toObject(ScheduledRecipe.class);
                     Button button = new Button(SelectRecipeActivity.this);
                     button.setText(recipe.getName());
                     button.setOnClickListener(v -> {
                         // todo set values of sr
-                        sdf = (SimpleDateFormat) getIntent().getExtras().getSerializable("date");
-                        sr.setDayOfMonth();
+                        //sdf = (SimpleDateFormat) getIntent().getExtras().getSerializable("date");
+                        //sr.setDayOfMonth();
+                        day = (int) getIntent().getExtras().getSerializable("day");
+                        month = (int) getIntent().getExtras().getSerializable("month");
+                        year = (int) getIntent().getExtras().getSerializable("year");
+                        sr = new ScheduledRecipe();
+                        sr.setDayOfMonth(day);
+                        sr.setMonth(month);
+                        sr.setYear(year);
+                        sr.setId(document.getId());
+                        sr.setOwnerID(firestoreGC.getOwnerID()); //todo format: string invert to int
+
                         showConfirmDialog(sr);
                         // add the recipe to calendar
                     });
@@ -86,8 +96,11 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         //TODO pass parameters
 
         ScheduledRecipe scheduledRecipe = sr;
-        ConfirmDialog dialog = new ConfirmDialog(sr);
-        dialog.show(getSupportFragmentManager(), "confirmDialog");
+        FirestoreGC.getInstance().getRecipeByID(sr.getId(),task -> {
+            Recipe recipe = task.toObject(Recipe.class);
+            ConfirmDialog dialog = new ConfirmDialog(sr, recipe);
+            dialog.show(getSupportFragmentManager(), "confirmDialog");
+        });
     }
 
     @Override
@@ -99,5 +112,12 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         String selectedDate = sdf.format(new Date(mCalendar.getDate()));
 
     }
+
+    @Override
+    public void onNegativeClick(DialogFragment confirmDialog) {
+        //dismissDialog();
+    }
+
+
 }
 
