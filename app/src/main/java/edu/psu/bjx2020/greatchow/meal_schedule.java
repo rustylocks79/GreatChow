@@ -57,7 +57,10 @@ public class meal_schedule extends AppCompatActivity {
         month = Integer.parseInt(temp.get(1));
         year = Integer.parseInt(temp.get(2));
 
+        // disable past date
+        mCalendar.setMinDate(System.currentTimeMillis() - 1000);
 
+        // get current date and future date
         mdate.setText("Date is : " + selectedDate );
         mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override

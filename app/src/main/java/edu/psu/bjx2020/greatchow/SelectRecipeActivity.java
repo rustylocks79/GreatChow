@@ -57,13 +57,10 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Recipe recipe = document.toObject(Recipe.class);
-                    //sr = document.toObject(ScheduledRecipe.class);
                     Button button = new Button(SelectRecipeActivity.this);
                     button.setText(recipe.getName());
                     button.setOnClickListener(v -> {
-                        // todo set values of sr
-                        //sdf = (SimpleDateFormat) getIntent().getExtras().getSerializable("date");
-                        //sr.setDayOfMonth();
+                        //  set values of sr
                         day = getIntent().getExtras().getInt("day");
                         month = getIntent().getExtras().getInt("month");
                         year = getIntent().getExtras().getInt("year");

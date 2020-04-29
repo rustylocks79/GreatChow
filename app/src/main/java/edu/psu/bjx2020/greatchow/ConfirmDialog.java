@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 import edu.psu.bjx2020.greatchow.db.Recipe;
-import edu.psu.bjx2020.greatchow.db.ScheduledRecipe;
 
 import java.security.acl.Owner;
 import java.text.SimpleDateFormat;
@@ -48,7 +47,7 @@ public class ConfirmDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add recipe?")
                 .setMessage("Add "+ mRecipe.getName()
-                        + " to your " + mdate + "?")
+                        + " to your meal plan on " + mdate + "?")
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
