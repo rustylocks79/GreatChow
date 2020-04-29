@@ -4,23 +4,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 import edu.psu.bjx2020.greatchow.db.ScheduledRecipe;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDialog.ConfirmDialogListener {
     private static final String TAG = "SelectRecipeActivity";
@@ -102,11 +97,6 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     @Override
     public void onPositiveClick(DialogFragment dialog, String id) {
         // TODO add the recipe to db
-//        CalendarView mCalendar = findViewById(R.id.calendarView);
-//        TextView mdate = findViewById(R.id.calendarTextView);
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
-//        String selectedDate = sdf.format(new Date(mCalendar.getDate()));
-
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         ScheduledRecipe sr = new ScheduledRecipe();
         sr.setDayOfMonth(day);
@@ -119,7 +109,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
 
     @Override
     public void onNegativeClick(DialogFragment confirmDialog) {
-        //dismissDialog();
+        confirmDialog.dismiss();
     }
 
 

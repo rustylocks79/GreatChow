@@ -8,11 +8,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import edu.psu.bjx2020.greatchow.db.FirestoreGC;
+import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +70,37 @@ public class meal_schedule extends AppCompatActivity {
                 mdate.setText("Date is : " + dayOfMonth +" / " + month + " / " + year);
             }
         });
+
+        showScheduledRecipe();
+    }
+
+    private void showScheduledRecipe() {
+        FirestoreGC firestoreGC = FirestoreGC.getInstance();
+        // LinearLayout format
+        LinearLayout list = findViewById(R.id.list);
+        firestoreGC.getAllMyRecipes(task -> {
+            if(task.isSuccessful()) {
+                for(QueryDocumentSnapshot document:task.getResult()) {
+                    Recipe recipe = (Recipe) task.getResult().toObjects(Recipe.class);
+                    Button button = new Button(meal_schedule.this);
+                    button.setText(recipe.getName());
+                    button.setOnClickListener(v -> {
+                        Intent intent = new Intent(meal_schedule.this, ViewRecipeActivity.class);
+                        intent.putExtra("recipe", recipe);
+                        intent.putExtra("id", document.getId());
+                        startActivity(intent);
+                    });
+                    list.addView(button);
+                    Log.d(TAG, document.getId() + " => " + recipe.toString());
+                }
+            } else {
+                Log.e(TAG, "Error getting documents: ", task.getException());
+            }
+
+        });
+
+
+
     }
 
     @Override
