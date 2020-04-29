@@ -4,9 +4,11 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -19,7 +21,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class FirestoreGC {
-    public interface OnDownloadImage {
+    public interface OnDownloadImageListener {
          void onCompete(File file);
     }
 
@@ -50,12 +52,8 @@ public class FirestoreGC {
      */
     public void addRecipe(Recipe recipe) {
         db.collection("recipes").add(recipe)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "add recipe to database: " + documentReference );
-                })
-                .addOnFailureListener((@NonNull Exception e) -> {
-                    Log.e(TAG, "failed to add recipe to database ", e);
-                }
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "add recipe to database: " + documentReference ))
+                .addOnFailureListener((@NonNull Exception e) -> Log.e(TAG, "failed to add recipe to database ", e)
         );
     }
 
@@ -74,6 +72,11 @@ public class FirestoreGC {
                 .addOnFailureListener((@NonNull Exception e) -> Log.e(TAG, "failed to add recipe to database ", e));
     }
 
+    public void getRecipeByID(String id, OnSuccessListener<DocumentSnapshot> onSuccessListener) {
+        db.collection("recipe").document(id).get()
+                .addOnSuccessListener(onSuccessListener);
+    }
+
     /**
      * Adds a scheduled recipe to the database.
      * @param recipe the scheduled recipe to be added to the database.
@@ -85,7 +88,7 @@ public class FirestoreGC {
     }
 
     /**
-     * Gets all the recipe in the database that meet the diet requirement
+     * Gets all the recipe in the database that meet the diet requirement ordered by name.
      * @param diet the minimum diet requirement.
      * @param onCompleteListener The listener that will be called when the query is complete.
      */
@@ -94,15 +97,28 @@ public class FirestoreGC {
                 .whereGreaterThanOrEqualTo("diet", diet)
                 .orderBy("diet")
                 .orderBy("name")
-                .get().addOnCompleteListener(onCompleteListener);
+                .get()
+                .addOnCompleteListener(onCompleteListener);
     }
 
+    /**
+     * Get all the recipes that belong to the current user ordered by name.
+     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     */
     public void getAllMyRecipes(OnCompleteListener<QuerySnapshot> onCompleteListener) {
         db.collection("recipes")
                 .whereEqualTo("ownerID", user.getUid())
-                .get().addOnCompleteListener(onCompleteListener);
+                .orderBy("name")
+                .get()
+                .addOnCompleteListener(onCompleteListener);
     }
 
+    /**
+     * Get all the recipes with the specified name and minimum level diet.
+     * @param name the name that the returned recipes will have.
+     * @param diet the minimum diet level.
+     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     */
     public void getRecipes(String name, int diet, OnCompleteListener<QuerySnapshot> onCompleteListener) {
         db.collection("recipes")
                 .whereEqualTo("name", name)
@@ -110,6 +126,10 @@ public class FirestoreGC {
                 .get().addOnCompleteListener(onCompleteListener);
     }
 
+    /**
+     * Returns all the scheduled recipes for the current user.
+     * @param onCompleteListener the listener that will be called once the database has returned the requested information.
+     */
     public void getScheduledRecipes(OnCompleteListener<QuerySnapshot> onCompleteListener) {
         db.collection("schedule")
                 .whereEqualTo("ownerID", user.getUid())
@@ -131,7 +151,7 @@ public class FirestoreGC {
         return storageRef.getPath();
     }
 
-    public void getImageFromStorage(String location, OnDownloadImage onDownloadImage) {
+    public void getImageFromStorage(String location, OnDownloadImageListener onDownloadImageListener) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(location);
         File localFile = null;
         try {
@@ -140,9 +160,16 @@ public class FirestoreGC {
             Log.e(TAG, "could not create temp file ", e);
         }
         File finalLocalFile = localFile;
-        storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> onDownloadImage.onCompete(finalLocalFile))
-            .addOnFailureListener(exception -> Log.e(TAG, "failed to download image", exception));
+        storageReference.getFile(localFile)
+                .addOnSuccessListener(taskSnapshot -> onDownloadImageListener.onCompete(finalLocalFile))
+                .addOnFailureListener(e -> Log.e(TAG, "failed to download image", e));
 
+    }
+
+    public void deleteRecipe(String id) {
+        db.collection("recipe").document(id).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "deleted document: " + id))
+                .addOnFailureListener(e -> Log.e(TAG, "failed to delete document: " + id, e));
     }
 
     public String getOwnerID() {

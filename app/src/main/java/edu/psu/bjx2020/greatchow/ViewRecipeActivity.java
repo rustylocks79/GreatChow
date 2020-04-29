@@ -1,5 +1,6 @@
 package edu.psu.bjx2020.greatchow;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,12 +10,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
+import java.text.SimpleDateFormat;
+
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    Recipe recipe;
+    private Recipe recipe;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         recipe = (Recipe) getIntent().getExtras().getSerializable("recipe");
+        id = getIntent().getExtras().getString("id");
 
         if(recipe.getPathToImage() != null) {
             ImageView recipeIV = findViewById(R.id.recipe_picture_iv);
@@ -71,9 +77,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.view_fab);
         fab.setOnClickListener(view -> {
-            // TODO: make fab delete current recipe
-//            Snackbar.make(view, recipe.getName(), Snackbar.LENGTH_SHORT)
-//                    .setAction("Action", null).show();
+            FirestoreGC firestoreGC = FirestoreGC.getInstance();
+            //TODO: make delete work. Currently the delete method of FirebaseGC does nothing.
+            Snackbar.make(view, "Deleted " + recipe.getName(), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+            Intent intent = new Intent(ViewRecipeActivity.this, MainActivity.class);
+            startActivity(intent);
         });
     }
 }

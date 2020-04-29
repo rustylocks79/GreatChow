@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Serializable {
-    public static final int NEITHER = 0;
+    public static final int NONE = 0;
     public static final int VEGETARIAN = 1;
     public static final int VEGAN = 2;
 
