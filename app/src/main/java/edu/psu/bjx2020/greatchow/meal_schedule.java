@@ -22,7 +22,8 @@ public class meal_schedule extends AppCompatActivity {
     private static final String TAG = "calendar";
 
     CalendarView mCalendar;
-    TextView mdate;
+    public static TextView mdate;
+    SimpleDateFormat sdf ;
     List<CalendarContract.EventDays> recipe_events = new ArrayList<CalendarContract.EventDays>();
 
     @Override
@@ -36,13 +37,9 @@ public class meal_schedule extends AppCompatActivity {
         setSupportActionBar(mcalToolbar);
 
         //get date in calendar
-
-
         mCalendar = findViewById(R.id.calendarView);
         mdate = findViewById(R.id.calendarTextView);
-        //mCalendar.getDate()
-        //mdate.setText((int) mCalendar.getDate());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd / MM / yyyy");
+        sdf = new SimpleDateFormat("dd / MM / yyyy");
         String selectedDate = sdf.format(new Date(mCalendar.getDate()));
         mdate.setText("Date is : " + selectedDate );
         mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -75,8 +72,10 @@ public class meal_schedule extends AppCompatActivity {
                 return true;
             }
             case R.id.action_schedule_meal_todate: {
-
-                startActivity(new Intent(this,SelectRecipeActivity.class));
+                //todo pass ownerid, date to selectRecipeActivity
+                Intent selectActivity = new Intent(this,SelectRecipeActivity.class);
+                selectActivity.putExtra("date", sdf);
+                startActivity(selectActivity);
                 return true;
             }
             default:
