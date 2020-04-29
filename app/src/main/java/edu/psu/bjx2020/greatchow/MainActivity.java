@@ -2,7 +2,9 @@ package edu.psu.bjx2020.greatchow;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,13 +13,18 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Arrays;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "MainActivity";
 
@@ -25,64 +32,55 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         // toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         //firestore
-        FirestoreGC firestoreGC = FirestoreGC.getInstance();
-        if (!firestoreGC.isAuthenticated()) {
-            //TODO: disable anonymous authentication
-
-//            List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                    new AuthUI.IdpConfig.EmailBuilder().build());
-//            startActivityForResult(
-//                    AuthUI.getInstance()
-//                            .createSignInIntentBuilder()
-//                            .setAvailableProviders(providers)
-//                            .setIsSmartLockEnabled(false)
-//                            .build(),
-//                    RC_SIGN_IN);
-
-            FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Authenticated successfully");
-                    FirestoreGC.getInstance().onSuccessfulAuthentication();
-                    postAuth();
-                } else {
-                    Log.e(TAG, "Authentication Failed");
-                }
-            });
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null) {
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build());
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setIsSmartLockEnabled(false)
+                            .build(),
+                    RC_SIGN_IN);
         } else {
-            postAuth();
+            updateUI();
         }
     }
 
 
-//TODO: disable anonymous authentication
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == RC_SIGN_IN) {
-//            IdpResponse response = IdpResponse.fromResultIntent(data);
-//            if (resultCode == RESULT_OK) {
-//                postAuth();
-//            } else {
-//                Log.e(TAG, "authentication failed");
-//            }
-//        }
-//    }
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            if (resultCode == RESULT_OK) {
+                updateUI();
+            } else {
+                Log.e(TAG, "authentication failed");
+            }
+        }
+    }
 
-    public void postAuth() {
+    public void updateUI() {
+        //Uncomment and run app to populate database
+//        Initializer.addRecipes();
+
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
-        //TODO: make it such that you can get information from shared preferences that manages the filtering.
-        firestoreGC.getAllRecipes(Recipe.NONE, queryDocumentSnapshots -> {
+        llRecipeList.removeAllViews();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int diet = Integer.parseInt(preferences.getString("diet", "0"));
+        Log.d(TAG, "getting recipes with diet level: " + diet);
+        firestoreGC.getAllRecipes(diet, queryDocumentSnapshots -> {
             for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                 Recipe recipe = document.toObject(Recipe.class);
                 Button button = new Button(MainActivity.this);
@@ -97,21 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, document.getId() + " => " + recipe.toString());
             }
         });
-
-        //Uncomment and run app to populate database
-//        Initializer.addRecipes();
-
-//
-//        //update a recipe
-//        firestoreGC.getRecipes("Scrambled Eggs", false, false, task -> {
-//            if (task.isSuccessful()) {
-//                Recipe recipe = task.getResult().getDocuments().get(0).toObject(Recipe.class);
-//                recipe.setName("Bacon and Eggs");
-//                firestoreGC.updateRecipe(task.getResult().getDocuments().get(0).getReference(), recipe);
-//            } else {
-//                Log.e(TAG, "Could not find scrambled eggs", task.getException());
-//            }
-//        });
     }
 
 
@@ -143,10 +126,18 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "meal_schedule: ");
                 return true;
             }
+            case R.id.action_menu_sign_out: {
+                FirebaseAuth.getInstance().signOut();
+                finishAndRemoveTask(); //TODO: wrong
+            }
             default:
             return super.onOptionsItemSelected(item);
         }
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        updateUI();
+    }
 }

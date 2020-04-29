@@ -20,7 +20,10 @@ import edu.psu.bjx2020.greatchow.db.Recipe;
 import edu.psu.bjx2020.greatchow.db.ScheduledRecipe;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class MealScheduleActivity extends AppCompatActivity {

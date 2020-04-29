@@ -14,8 +14,6 @@ import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
-import java.text.SimpleDateFormat;
-
 public class ViewRecipeActivity extends AppCompatActivity {
 
     private Recipe recipe;

@@ -1,7 +1,9 @@
 package edu.psu.bjx2020.greatchow;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -50,7 +52,10 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     public void postAuth() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         LinearLayout selectRecipeList = findViewById(R.id.search_recipe_list_ll);
-        firestoreGC.getAllRecipes(Recipe.VEGETARIAN, queryDocumentSnapshots -> {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int diet = Integer.parseInt(preferences.getString("diet", "0"));
+        //TODO: I do not account for shared preference changes during this activity. Going back to it after created will cause issues.
+        firestoreGC.getAllRecipes(diet, queryDocumentSnapshots -> {
             for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                 Recipe recipe = document.toObject(Recipe.class);
                 Button button = new Button(SelectRecipeActivity.this);

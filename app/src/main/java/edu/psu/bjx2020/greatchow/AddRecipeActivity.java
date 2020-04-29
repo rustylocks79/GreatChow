@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,20 +13,26 @@ import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AddRecipeActivity extends AppCompatActivity {
     private static final String TAG = "AddRecipeActivity";
 
     private static final int REQUEST_IMAGE_CAPTURE = 0;
     private static final int REQUEST_IMAGE_STORAGE = 1;
+    private static final int RC_SIGN_IN = 123;
     private ImageView ivRecipe;
 
     int ingredientCounter;
@@ -39,6 +46,24 @@ public class AddRecipeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //firestore
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null) {
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build());
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setIsSmartLockEnabled(false)
+                            .build(),
+                    RC_SIGN_IN);
+        } else {
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
         ivRecipe = findViewById(R.id.recipe_picture_iv);
 
         FloatingActionButton fab = findViewById(R.id.add_fab);
@@ -83,7 +108,12 @@ public class AddRecipeActivity extends AppCompatActivity {
             ImageView imageView = findViewById(R.id.recipe_picture_iv);
 
             FirestoreGC firebaseGC = FirestoreGC.getInstance();
-            String pathToImage = firebaseGC.uploadRecipeImage(((BitmapDrawable) imageView.getDrawable()).getBitmap(), firebaseGC.getOwnerID());
+            String pathToImage = null;
+            Drawable drawable = imageView.getDrawable();
+            //TODO: find some better condition to determine if the user has put a picture here.
+            if(drawable != null && drawable instanceof BitmapDrawable) {
+                pathToImage = firebaseGC.uploadRecipeImage(((BitmapDrawable) drawable).getBitmap(), firebaseGC.getOwnerID());
+            }
             Recipe recipe = new Recipe();
             recipe.setName(name);
             recipe.setOwnerID(firebaseGC.getOwnerID());
@@ -149,6 +179,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             switch (requestCode) {
+                case RC_SIGN_IN:
+                    updateUI();
+                    break;
                 case REQUEST_IMAGE_CAPTURE:
                     try {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");

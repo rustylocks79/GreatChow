@@ -8,6 +8,11 @@
           android:orderInCategory="100"
           app:showAsAction="never"
     />
+    <item android:id="@+id/action_menu_sign_out"
+          android:title="@string/sign_out_setting"
+          android:orderInCategory="100"
+          app:showAsAction="never"
+    />
     <item android:id="@+id/action_add_recipe"
           android:title="@string/preference_add_recipe"
           android:icon="@drawable/ic_pen_edit"

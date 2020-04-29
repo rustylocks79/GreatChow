@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -25,21 +24,12 @@ public class FirestoreGC {
 
     private static FirestoreGC INSTANCE;
     private FirebaseFirestore db;
-    private FirebaseUser user;
 
     public static synchronized FirestoreGC getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new FirestoreGC();
         }
         return INSTANCE;
-    }
-
-    public void onSuccessfulAuthentication() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    public boolean isAuthenticated() {
-        return user != null;
     }
 
     /**
@@ -104,7 +94,7 @@ public class FirestoreGC {
      */
     public void getAllMyRecipes(OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("recipes")
-                .whereEqualTo("ownerID", user.getUid())
+                .whereEqualTo("ownerID", getOwnerID())
                 .orderBy("name")
                 .get()
                 .addOnSuccessListener(onSuccessListener)
@@ -132,7 +122,7 @@ public class FirestoreGC {
      */
     public void getScheduledRecipes(OnSuccessListener<QuerySnapshot> onSuccessListener) {
         db.collection("schedule")
-                .whereEqualTo("ownerID", user.getUid())
+                .whereEqualTo("ownerID", getOwnerID())
                 .orderBy("year", Query.Direction.ASCENDING)
                 .orderBy("month", Query.Direction.ASCENDING)
                 .orderBy("dayOfMonth", Query.Direction.ASCENDING)
@@ -178,7 +168,7 @@ public class FirestoreGC {
     }
 
     public String getOwnerID() {
-        return user.getUid();
+        return FirebaseAuth.getInstance().getUid();
     }
 
     public void updateRecipe(DocumentReference reference, Recipe recipe) {

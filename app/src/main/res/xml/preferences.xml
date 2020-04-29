@@ -15,20 +15,21 @@
 
     <PreferenceCategory
             android:title="@string/personal_setting">
-    <ListPreference
+        <ListPreference
             android:id="@+id/sList"
             android:key="sorting_preference"
             android:title="Sorting Attributes"
             android:entries="@array/sorting"
             android:entryValues="@array/sortingAttributes"
-            android:defaultValue="Alp"
-    />
+            android:defaultValue="Alp"/>
 
-    <CheckBoxPreference
-            android:id="@+id/vCheckBox"
-            android:key="@string/pref_vege"
-            android:title="@string/pref_vege"
-            android:summary="@string/pref_vege_summ"
-            android:defaultValue="false" />
+        <ListPreference
+            android:id="@+id/vDiet"
+            android:key="diet"
+            android:title="@string/pref_diet"
+            android:summary="@string/pref_diet_summary"
+            android:defaultValue="1"
+            android:entries="@array/diet_categories"
+            android:entryValues="@array/diet_attributes"/>
     </PreferenceCategory>
 </PreferenceScreen>

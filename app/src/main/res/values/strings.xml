@@ -2,8 +2,6 @@
     <string name="app_name">GreatChow</string>
     <string name="preference_setting">Setting</string>
     <string name="default_lang">English</string>
-    <string name="pref_vege">Vegetarian</string>
-    <string name="pref_vege_summ">Only show vegetarian recipe.</string>
     <string name="sys_setting">System Settings</string>
     <string name="personal_setting">Personal Settings</string>
     <string name="list1">edu.psu.bjx2020.greatchow.list1</string>
@@ -15,6 +13,9 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <string name="pref_diet">Diet</string>
+    <string name="pref_diet_summary">Only show recipes that meet your diet restrictions</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -42,4 +43,5 @@
     <string name="Schedule_meal">Schedule Meal</string>
     <string name="title_activity_select_recipe">SelectRecipeActivity</string>
     <string name="diet_notes">Diet Notes:</string>
+    <string name="sign_out_setting">Sign Out</string>
 </resources>
