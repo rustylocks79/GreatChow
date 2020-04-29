@@ -77,8 +77,8 @@ public class AddRecipeActivity extends AppCompatActivity {
             EditText etNutrition = findViewById(R.id.enter_nutrition_et);
             String nutritionalInfo = etNutrition.getText().toString();
 
-            Spinner dietSpinner = findViewById(R.id.diet_category_spinner);
-            int diet = dietSpinner.getSelectedItemPosition();
+            Spinner spDiet = findViewById(R.id.diet_category_spinner);
+            int diet = spDiet.getSelectedItemPosition();
 
             ImageView imageView = findViewById(R.id.recipe_picture_iv);
 
@@ -109,18 +109,10 @@ public class AddRecipeActivity extends AppCompatActivity {
             editText.setId(ingredientCounter);
             editText.setHint(R.string.enter_ingredient);
             llIngredientContainer.addView(editText);
-
-            //LOG STUFF
-//                View v1 = findViewById(1000);
-//                View vOther = findViewById(ingredientCounter);
-//                Log.d("first", "" + v1.getId());
-//                Log.d("other", "" + vOther.getId());
         });
 
 
-        //****************************************************************************************************//
-
-        //Dynamic Process List
+        //Dynamic Steps List
         processCounter = 2000;
         findViewById(R.id.enter_process_et_1).setId(processCounter);
         LinearLayout llProcessContainer = findViewById(R.id.ll_process_container);
@@ -131,13 +123,6 @@ public class AddRecipeActivity extends AppCompatActivity {
             editText.setId(processCounter);
             editText.setHint(R.string.enter_process_step);
             llProcessContainer.addView(editText);
-
-            //LOG STUFF
-//                View v1 = findViewById(2000);
-//                View vOther = findViewById(processCounter);
-//                Log.d("first", "" + v1.getId());
-//                Log.d("other", "" + vOther.getId());
-
         });
 
         Button btnAddImage = findViewById(R.id.add_image_button);
@@ -169,7 +154,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         ivRecipe.setImageBitmap(selectedImage);
                     } catch (Exception e) {
-                        Log.e(TAG, "could not add photo (Camera)", e);
+                        Log.e(TAG, "Could not add photo (Camera).", e);
                     }
                     break;
                 case REQUEST_IMAGE_STORAGE:
@@ -180,10 +165,10 @@ public class AddRecipeActivity extends AppCompatActivity {
                             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                             ivRecipe.setImageBitmap(selectedImage);
                         } else {
-                            Log.e(TAG, "null image uri");
+                            Log.e(TAG, "Image Uri == null", new NullPointerException());
                         }
                     } catch (FileNotFoundException e) {
-                        Log.e(TAG, "could not add photo (Gallary)", e);
+                        Log.e(TAG, "Could not add photo (Gallery). ", e);
                     }
                     break;
             }

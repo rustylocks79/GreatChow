@@ -11,7 +11,7 @@ public class Initializer {
         superHam.setOwnerID(firestoreGC.getOwnerID());
         superHam.setPathToImage(null);
         superHam.setNutritionalInfo("6,600 calories\nAll protein");
-        superHam.setDiet(Recipe.NEITHER);
+        superHam.setDiet(Recipe.NONE);
         superHam.setIngredients(Arrays.asList(
                 "84 Cubic Litres of Chicken",
                 "Elmer's Wood Glue"));
