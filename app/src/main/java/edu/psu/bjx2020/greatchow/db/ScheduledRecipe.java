@@ -7,17 +7,19 @@ public class ScheduledRecipe {
     private int dayOfMonth;
     private String ownerID;
     private String id;
+    private String name;
 
     public ScheduledRecipe() {
 
     }
 
-    public ScheduledRecipe(int year, int month, int dayOfMonth, String ownerID, String id) {
+    public ScheduledRecipe(int year, int month, int dayOfMonth, String ownerID, String id, String name) {
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
         this.ownerID = ownerID;
         this.id = id;
+        this.name = name;
     }
 
     public int getYear() {
@@ -60,6 +62,10 @@ public class ScheduledRecipe {
         this.id = id;
     }
 
+    public String getName(){return name;}
+
+    public void setName(String name){this.name = name;}
+
     @Override
     public String toString() {
         return "ScheduledRecipe{" +
@@ -67,7 +73,8 @@ public class ScheduledRecipe {
                 ", month=" + month +
                 ", dayOfWeek=" + dayOfMonth +
                 ", ownerID='" + ownerID + '\'' +
-                ", id='" + id + '\'' +
+                ", id='" + id +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

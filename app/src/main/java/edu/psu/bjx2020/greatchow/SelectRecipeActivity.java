@@ -25,7 +25,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     private int year, month, dayOfMonth;
-
+    private String recipeName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +72,15 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     private void showConfirmDialog(String id) {
         FirestoreGC.getInstance().getRecipeByID(id, documentSnapshot -> {
             Recipe recipe = documentSnapshot.toObject(Recipe.class);
-            ConfirmDialog dialog = new ConfirmDialog(id, recipe, year, month, dayOfMonth);
+            recipeName = recipe.getName();
+            ConfirmDialog dialog = new ConfirmDialog(recipeName, id, recipe, year, month, dayOfMonth);
             dialog.show(getSupportFragmentManager(), "confirmDialog");
         });
     }
 
+
     @Override
-    public void onPositiveClick(DialogFragment dialog, String id, int year, int month, int dayOfWeek) {
+    public void onPositiveClick(DialogFragment dialog, String name, String id, int year, int month, int dayOfWeek) {
         Log.d(TAG, "User accepted scheduling id=" + id + " on date=" + month + "/" + dayOfWeek + "/" + year);
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         ScheduledRecipe sr = new ScheduledRecipe();
@@ -87,6 +89,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         sr.setMonth(month);
         sr.setDayOfMonth(dayOfWeek);
         sr.setOwnerID(firestoreGC.getOwnerID());
+        sr.setName(recipeName);
         firestoreGC.addScheduledRecipe(sr);
         Intent intent = new Intent(SelectRecipeActivity.this, MealScheduleActivity.class);
         startActivity(intent);

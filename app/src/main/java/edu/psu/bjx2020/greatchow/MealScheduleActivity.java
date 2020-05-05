@@ -80,7 +80,8 @@ public class MealScheduleActivity extends AppCompatActivity {
                 ScheduledRecipe scheduledRecipe = document.toObject(ScheduledRecipe.class);
                 Button button = new Button(MealScheduleActivity.this);
                 String dateText = scheduledRecipe.getMonth() + "/" + scheduledRecipe.getDayOfMonth() + "/" + scheduledRecipe.getYear();
-                button.setText(dateText);
+                String recipename = scheduledRecipe.getName();
+                button.setText(dateText+"    "+recipename);
                 button.setOnClickListener(v -> firestoreGC.getRecipeByID(scheduledRecipe.getId(), documentSnapshot -> {
                     Intent intent = new Intent(MealScheduleActivity.this, ViewRecipeActivity.class);
                     intent.putExtra("recipe", documentSnapshot.toObject(Recipe.class));

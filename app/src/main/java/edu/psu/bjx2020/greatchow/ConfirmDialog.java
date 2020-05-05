@@ -14,14 +14,15 @@ import java.util.Locale;
 public class ConfirmDialog extends DialogFragment {
     private static final String TAG = "ConfirmDialog";
     private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-
+    private String name;
     private String mRecipeId;
     private Recipe mRecipe;
     private int year, month, dayOfWeek;
 
     private ConfirmDialogListener listener;
     public ConfirmDialog() {}
-    public ConfirmDialog(String id, Recipe recipe, int year, int month, int dayOfWeek) {
+    public ConfirmDialog(String name, String id, Recipe recipe, int year, int month, int dayOfWeek) {
+        this.name = name;
         this.mRecipeId = id;
         this.mRecipe = recipe;
         this.year = year;
@@ -30,7 +31,10 @@ public class ConfirmDialog extends DialogFragment {
     }
 
     public interface ConfirmDialogListener{
-        void onPositiveClick(DialogFragment confirmDialog, String recipeID, int year, int month, int dayOfWeek);
+        //void onPositiveClick(DialogFragment confirmDialog, String recipeID, int year, int month, int dayOfWeek);
+
+        void onPositiveClick(DialogFragment dialog, String name, String id, int year, int month, int dayOfWeek);
+
         void onNegativeClick(DialogFragment confirmDialog);
     }
 
@@ -40,7 +44,7 @@ public class ConfirmDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add recipe?")
                 .setMessage("Add "+ mRecipe.getName() + " to your meal plan on " + dateText + "?")
-                .setPositiveButton("Accept", (dialog, which) -> listener.onPositiveClick(ConfirmDialog.this, mRecipeId, year, month, dayOfWeek))
+                .setPositiveButton("Accept", (dialog, which) -> listener.onPositiveClick(ConfirmDialog.this, name, mRecipeId, year, month, dayOfWeek))
                 .setNegativeButton("Cancel", (dialog, id) -> listener.onNegativeClick(ConfirmDialog.this));
         return builder.create();
     }
