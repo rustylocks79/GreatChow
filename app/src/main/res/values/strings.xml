@@ -47,5 +47,5 @@
     <string name="mainActivity">main activity</string>
 
     <string name="facebook_app_id">584681278824857</string>
-    <string name="share_button">Share</string>
+    <string name="share_button">Share on Facebook</string>
 </resources>
