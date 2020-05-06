@@ -25,6 +25,12 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -42,4 +48,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+
+    implementation 'com.facebook.android:facebook-share:[5,6)'
 }

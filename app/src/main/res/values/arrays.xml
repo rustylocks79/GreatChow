@@ -16,12 +16,10 @@
 
     <string-array name="sorting">
         <item>"Alphabetical"</item>
-        <item>"Most recent"</item>
     </string-array>
 
     <string-array name="sortingAttributes">
         <item>"Alp"</item>
-        <item>"Time"</item>
     </string-array>
 
     <string-array name="diet_categories">

@@ -14,6 +14,7 @@ public class Recipe implements Serializable {
     private String pathToImage;
     private String nutritionalInfo;
     private int diet;
+
     private List<String> ingredients = new ArrayList<>();
     private List<String> steps = new ArrayList<>();
 

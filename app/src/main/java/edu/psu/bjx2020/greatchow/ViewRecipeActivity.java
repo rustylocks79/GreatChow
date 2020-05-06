@@ -3,12 +3,22 @@ package edu.psu.bjx2020.greatchow;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
@@ -18,20 +28,39 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
     private Recipe recipe;
     private String id;
+    private ImageView recipeIV;
+    private CallbackManager callbackManager;
+    private ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+
+        recipe = (Recipe) getIntent().getExtras().getSerializable("recipe");
+        id = getIntent().getExtras().getString("id");
+        recipeIV = findViewById(R.id.recipe_picture_iv);
+
+        Button btnShare = findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(view -> {
+            if (ShareDialog.canShow(SharePhotoContent.class)) {
+                Bitmap image = ((BitmapDrawable) recipeIV.getDrawable()).getBitmap();
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image)
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+                shareDialog.show(content);
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recipe = (Recipe) getIntent().getExtras().getSerializable("recipe");
-        id = getIntent().getExtras().getString("id");
-
         if(recipe.getPathToImage() != null) {
-            ImageView recipeIV = findViewById(R.id.recipe_picture_iv);
             FirestoreGC firestoreGC = FirestoreGC.getInstance();
             firestoreGC.getImageFromStorage(recipe.getPathToImage(), file -> {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
@@ -39,7 +68,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             });
         }
 
-            TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
+        TextView recipeNameTV = findViewById(R.id.recipe_name_tv);
         recipeNameTV.setText(recipe.getName());
 
         LinearLayout llIngredientContainer = findViewById(R.id.ll_ingredients_container);
@@ -77,10 +106,17 @@ public class ViewRecipeActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             FirestoreGC firestoreGC = FirestoreGC.getInstance();
             //TODO: make delete work. Currently the delete method of FirebaseGC does nothing.
+            firestoreGC.deleteRecipe(id);
             Snackbar.make(view, "Deleted " + recipe.getName(), Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
             Intent intent = new Intent(ViewRecipeActivity.this, MainActivity.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

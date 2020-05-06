@@ -45,4 +45,7 @@
     <string name="diet_notes">Diet Notes:</string>
     <string name="sign_out_setting">Sign Out</string>
     <string name="mainActivity">main activity</string>
+
+    <string name="facebook_app_id">584681278824857</string>
+    <string name="share_button">Share</string>
 </resources>

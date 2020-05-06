@@ -70,10 +70,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+
+
     public void updateUI() {
         //Uncomment and run app to populate database
 //        Initializer.addRecipes();
-
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         LinearLayout llRecipeList = findViewById(R.id.recipe_list_ll);
         llRecipeList.removeAllViews();
@@ -138,6 +139,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updateUI();
+        Log.d(TAG, "shared change detected on key: " + key);
+        if(key.equals("diet")) {
+            updateUI();
+        }
     }
 }

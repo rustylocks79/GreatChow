@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="edu.psu.bjx2020.greatchow">
 
     <uses-feature
             android:name="android.hardware.camera"
             android:required="true"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -13,6 +14,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" tools:replace="android:value"/>
         <activity
                 android:name=".SelectRecipeActivity"
                 android:label="@string/title_activity_select_recipe"
@@ -43,6 +45,9 @@
         <activity
                 android:name=".SettingsActivity"
                 android:screenOrientation="fullSensor"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider584681278824857"
+                  android:name="com.facebook.FacebookContentProvider"
+                  android:exported="true"/>
     </application>
 
 </manifest>

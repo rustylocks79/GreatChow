@@ -162,7 +162,7 @@ public class FirestoreGC {
     }
 
     public void deleteRecipe(String id) {
-        db.collection("recipe").document(id).delete()
+        db.collection("recipes").document(id).delete()
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "deleted document: " + id))
                 .addOnFailureListener(e -> Log.e(TAG, "failed to delete document: " + id, e));
     }
