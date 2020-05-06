@@ -5,10 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -46,14 +43,18 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Button btnShare = findViewById(R.id.btnShare);
         btnShare.setOnClickListener(view -> {
             if (ShareDialog.canShow(SharePhotoContent.class)) {
-                Bitmap image = ((BitmapDrawable) recipeIV.getDrawable()).getBitmap();
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(image)
-                        .build();
-                SharePhotoContent content = new SharePhotoContent.Builder()
-                        .addPhoto(photo)
-                        .build();
-                shareDialog.show(content);
+                if (!(recipeIV.getDrawable() instanceof BitmapDrawable)) {
+                    Toast.makeText(this, "No Image to share", Toast.LENGTH_SHORT).show();
+                } else {
+                    Bitmap image = ((BitmapDrawable) recipeIV.getDrawable()).getBitmap();
+                    SharePhoto photo = new SharePhoto.Builder()
+                            .setBitmap(image)
+                            .build();
+                    SharePhotoContent content = new SharePhotoContent.Builder()
+                            .addPhoto(photo)
+                            .build();
+                    shareDialog.show(content);
+                }
             }
         });
 
