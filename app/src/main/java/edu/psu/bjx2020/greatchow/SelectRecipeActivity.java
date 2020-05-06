@@ -5,13 +5,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import edu.psu.bjx2020.greatchow.db.FirestoreGC;
 import edu.psu.bjx2020.greatchow.db.Recipe;
@@ -26,10 +28,22 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
 
     private int year, month, dayOfMonth;
     private String recipeName;
+    private String id;
+    private Recipe recipe;
+    static final String NAME_KEY = "recipename";
+    static final String ID_KEY = "recipeID";
+    static final String DATE_KEY = "day";
+    static final String MONTH_KEY = "month";
+    static final String YEAR_KEY = "year";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_select_recipe);
+
         Bundle extras = getIntent().getExtras();
         year = extras.getInt("year");
         month = extras.getInt("month");
@@ -37,18 +51,26 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         Log.d(TAG, "Creating Select Recipe Activity with date=" + month + "/" + dayOfMonth + "/" + year);
 
         //toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.select_add_toolbar);
         setSupportActionBar(toolbar);
 
-        //finish floating button
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        });
         postAuth();
+
     }
 
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(NAME_KEY, recipeName);
+        outState.putString(ID_KEY, id);
+        outState.putInt(DATE_KEY, dayOfMonth);
+        outState.putInt(MONTH_KEY,month);
+        outState.putInt(YEAR_KEY,year);
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
+    }
     public void postAuth() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();
         LinearLayout selectRecipeList = findViewById(R.id.search_recipe_list_ll);
@@ -73,8 +95,8 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         FirestoreGC.getInstance().getRecipeByID(id, documentSnapshot -> {
             Recipe recipe = documentSnapshot.toObject(Recipe.class);
             recipeName = recipe.getName();
-            ConfirmDialog dialog = new ConfirmDialog(recipeName, id, recipe, year, month, dayOfMonth);
-            dialog.show(getSupportFragmentManager(), "confirmDialog");
+            new ConfirmDialog(recipeName, id, recipe, year, month, dayOfMonth).show(getSupportFragmentManager(),"confirmdialog");
+            //dialog.show(getSupportFragmentManager(), "confirmDialog");
         });
     }
 
@@ -92,6 +114,7 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
         sr.setName(recipeName);
         firestoreGC.addScheduledRecipe(sr);
         Intent intent = new Intent(SelectRecipeActivity.this, MealScheduleActivity.class);
+        Toast.makeText(this, "The recipe is added to date.", Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 
@@ -99,6 +122,32 @@ public class SelectRecipeActivity extends AppCompatActivity implements ConfirmDi
     public void onNegativeClick(DialogFragment confirmDialog) {
         confirmDialog.dismiss();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.select_add_menu, menu);
+        //Log.d(TAG, "onCreateOptionsMenu: ");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_menu_setting: {
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            }
+            case R.id.action_main: {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
 }

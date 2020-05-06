@@ -35,6 +35,7 @@ public class MealScheduleActivity extends AppCompatActivity {
     //TODO: allow multiple locals
     private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class MealScheduleActivity extends AppCompatActivity {
 
         showScheduledRecipe();
     }
+
 
     private void showScheduledRecipe() {
         FirestoreGC firestoreGC = FirestoreGC.getInstance();

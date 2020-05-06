@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".meal_schedule">
@@ -8,18 +9,20 @@
           android:orderInCategory="100"
           app:showAsAction="never"
     />
+
+    <item android:id="@+id/action_main"
+             android:title="@string/Schedule_meal"
+             android:icon="@drawable/ic_home_foreground"
+             android:orderInCategory="100"
+             app:showAsAction="ifRoom"
+    />
     <item android:id="@+id/action_schedule_meal_todate"
-          android:title="@string/Schedule_meal"
+          android:title="@string/mainActivity"
           android:icon="@drawable/ic_add_edit_foreground"
           android:orderInCategory="100"
           app:showAsAction="ifRoom"
     />
 
-    <item android:id="@+id/action_main"
-          android:title="@string/Schedule_meal"
-          android:icon="@drawable/ic_calendar_foreground"
-          android:orderInCategory="100"
-          app:showAsAction="ifRoom"
-    />
+
 
 </menu>
